@@ -1,6 +1,6 @@
 <?php
 
-namespace utils;
+namespace Comicrelief\Behat\Utils;
 
 
 class DataProvider extends Webconnector
