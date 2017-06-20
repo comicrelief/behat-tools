@@ -1,6 +1,6 @@
 <?php
 
-namespace utils;
+namespace Comicrelief\Behat\Utils;
 
 
 use Behat\MinkExtension\Context\RawMinkContext;

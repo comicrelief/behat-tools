@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "838c5c0da55b130b31e22d15172def43",
+    "hash": "1bd3f65c62fc8cb3063713251a3d6665",
     "content-hash": "fdf0e38f75d1bc79048a8506065de3c3",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.29.7",
+            "version": "3.29.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "76540001ff938c072db5367a7c945296984b999b"
+                "reference": "c60a477ad5ba1b120d4d80cbddf97fbe36573996"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/76540001ff938c072db5367a7c945296984b999b",
-                "reference": "76540001ff938c072db5367a7c945296984b999b",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c60a477ad5ba1b120d4d80cbddf97fbe36573996",
+                "reference": "c60a477ad5ba1b120d4d80cbddf97fbe36573996",
                 "shasum": ""
             },
             "require": {
@@ -85,7 +85,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-06-16 17:29:33"
+            "time": "2017-06-19 19:14:37"
         },
         {
             "name": "behat/behat",

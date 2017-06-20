@@ -1,9 +1,9 @@
 <?php
 
-namespace context;
+namespace Comicrelief\Behat\Context;
 
 
-use utils\Webconnector;
+use Comicrelief\Behat\Utils\Webconnector;
 
 class CommonContext extends Webconnector
 {
