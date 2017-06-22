@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1bd3f65c62fc8cb3063713251a3d6665",
-    "content-hash": "fdf0e38f75d1bc79048a8506065de3c3",
+    "hash": "5c48eafa6c0bfc19b41f5bcfe09df0a6",
+    "content-hash": "dfc2fdc497ce8e37bb67d76e1e71a9d6",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.29.8",
+            "version": "3.29.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "c60a477ad5ba1b120d4d80cbddf97fbe36573996"
+                "reference": "fdb015e0905fccf25b35a78e6fda02673df97dc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c60a477ad5ba1b120d4d80cbddf97fbe36573996",
-                "reference": "c60a477ad5ba1b120d4d80cbddf97fbe36573996",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/fdb015e0905fccf25b35a78e6fda02673df97dc8",
+                "reference": "fdb015e0905fccf25b35a78e6fda02673df97dc8",
                 "shasum": ""
             },
             "require": {
@@ -85,7 +85,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-06-19 19:14:37"
+            "time": "2017-06-20 20:54:58"
         },
         {
             "name": "behat/behat",
@@ -694,6 +694,54 @@
                 "scraper"
             ],
             "time": "2017-01-03 13:21:43"
+        },
+        {
+            "name": "fzaninotto/faker",
+            "version": "v1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fzaninotto/Faker.git",
+                "reference": "44f9a286a04b80c76a4e5fb7aad8bb539b920123"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/44f9a286a04b80c76a4e5fb7aad8bb539b920123",
+                "reference": "44f9a286a04b80c76a4e5fb7aad8bb539b920123",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.3|^7.0"
+            },
+            "require-dev": {
+                "ext-intl": "*",
+                "phpunit/phpunit": "~4.0",
+                "squizlabs/php_codesniffer": "~1.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": []
+            },
+            "autoload": {
+                "psr-4": {
+                    "Faker\\": "src/Faker/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Zaninotto"
+                }
+            ],
+            "description": "Faker is a PHP library that generates fake data for you.",
+            "keywords": [
+                "data",
+                "faker",
+                "fixtures"
+            ],
+            "time": "2016-04-29 12:21:54"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -2228,16 +2276,16 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "3.0.3",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "02b6b2c7aefe2cdb1185b8dbf8718b0bcedf3ab3"
+                "reference": "74776f8dbc081cab9287c2a601c0c1d842568744"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/02b6b2c7aefe2cdb1185b8dbf8718b0bcedf3ab3",
-                "reference": "02b6b2c7aefe2cdb1185b8dbf8718b0bcedf3ab3",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/74776f8dbc081cab9287c2a601c0c1d842568744",
+                "reference": "74776f8dbc081cab9287c2a601c0c1d842568744",
                 "shasum": ""
             },
             "require": {
@@ -2274,7 +2322,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2017-05-18 10:10:00"
+            "time": "2017-06-20 16:25:05"
         },
         {
             "name": "sebastian/exporter",
