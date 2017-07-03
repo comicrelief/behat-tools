@@ -15,9 +15,8 @@ use Psr\Http\Message\ResponseInterface;
  */
 class RestContext implements Context
 {
-    protected $_requestUrl;
-    private $_restObjectType;
-    private $_restObjectMethod = 'get';
+    protected $requestUrl;
+    private $requestMethod = 'get';
     /* @var \GuzzleHttp\Client */
     private $_client;
     /* @var ResponseInterface */
@@ -35,58 +34,39 @@ class RestContext implements Context
     }
 
     /**
-     * @Given /^that I want to make a new "([^"]*)"$/
-     * @param string $objectType
+     * @Given /^that I want to make a new "([^"]*)" request$/
+     * @param string $requestMethod
      */
-    public function thatIWantToMakeANew($objectType): void
+    public function thatIWantToMakeANew($requestMethod): void
     {
-        $this->_restObjectType = ucwords(strtolower($objectType));
-        $this->_restObjectMethod = 'post';
+        $this->requestMethod = 'post';
     }
 
     /**
-     * @When I send get request to :arg1
+     * @When I send :arg1 request to :arg2
      * @param string $pageUrl
      * @throws RequestException
      */
-    public function iSendGetRequest($pageUrl): void
+    public function iSendRequestTo(string $requestMethod, string $pageUrl): void
     {
         $baseUrl = $this->getParameter('base_url');
 
-        $this->_requestUrl = $baseUrl . $pageUrl;
+        $this->requestUrl = $baseUrl . $pageUrl;
 
         try {
-            $this->_response = $this->_client->get($this->_requestUrl);
+            $this->_response = $this->_client->request($requestMethod, $this->requestUrl);
         } catch (RequestException $e) {
             $this->_response = $e->getResponse();
         }
     }
 
     /**
-     * @When I send get request to :arg1
-     * @param string $pageUrl
-     * @throws RequestException
-     */
-    public function iSendTheRequest($pageUrl): void
-    {
-        $baseUrl = $this->getParameter('base_url');
-
-        $this->_requestUrl = $baseUrl . $pageUrl;
-
-        try {
-            $this->_response = $this->_client->request($this->_restObjectMethod, $this->_requestUrl);
-        } catch (RequestException $e) {
-            $this->_response = $e->getResponse();
-        }
-    }
-
-    /**
-     * @Then /^the response is JSON$/
+     * @Then /^the response should be in JSON format$/
      * @throws \RuntimeException
      */
     public function theResponseIsJson(): void
     {
-        $this->responseBody = json_decode($this->_response->getBody());
+        $this->responseBody = \GuzzleHttp\json_decode($this->_response->getBody());
 
         if (empty($this->responseBody)) {
             throw new \RuntimeException('Response was not JSON');
@@ -112,26 +92,6 @@ class RestContext implements Context
         if ((string)$this->_response->getStatusCode() !== $httpStatus) {
             throw new \RuntimeException('HTTP code does not match ' . $httpStatus .
                 ' (actual: ' . $this->_response->getStatusCode() . ')' . $this->_response->getBody());
-        }
-    }
-
-    /**
-     * @Given /^the response has a "([^"]*)" property$/
-     * @Given /^the response has an "([^"]*)" property$/
-     * @param string $propertyName
-     * @throws \RuntimeException
-     */
-    public function theResponseHasAProperty($propertyName): void
-    {
-        $data = json_decode($this->_response->getBody(), true);
-        $count = count($data);
-        $count = random_int(0, $count - 1);
-        $data = $data[$count];
-
-        $this->theResponseIsJson();
-
-        if (static::path($data, $propertyName) === null) {
-            throw new \RuntimeException("Property '" . $propertyName . "' is not set!\n");
         }
     }
 
@@ -173,6 +133,41 @@ class RestContext implements Context
         } while ($keys);
         // Unable to find the value requested
         return $default;
+    }
+
+    /**
+     * @Given /^the response has a "([^"]*)" property$/
+     * @Given /^the response has an "([^"]*)" property$/
+     * @param string $propertyName
+     * @throws \RuntimeException
+     */
+    public function theResponseHasAProperty(string $propertyName): void
+    {
+        $this->_response->getBody()->rewind();
+        $data = json_decode($this->_response->getBody()->getContents(), true);
+
+        if (static::path($data, $propertyName) === null) {
+            throw new \RuntimeException("Property '" . $propertyName . "' is not set!\n");
+        }
+    }
+
+    /**
+     * @Given /^the response item has a "([^"]*)" property$/
+     * @Given /^the response item has an "([^"]*)" property$/
+     * @param string $propertyName
+     * @throws \RuntimeException
+     */
+    public function theResponseItemHasAProperty(string $propertyName): void
+    {
+        $this->_response->getBody()->rewind();
+        $data = json_decode($this->_response->getBody()->getContents(), true);
+
+        $randomIndex = random_int(0, count($data) - 1);
+        $item = $data[$randomIndex];
+
+        if (static::path($item, $propertyName) === null) {
+            throw new \RuntimeException("Property '" . $propertyName . "' is not set!\n");
+        }
     }
 
     /**
