@@ -37,15 +37,15 @@ class RestContext implements Context
      * @Given /^that I want to make a new "([^"]*)" request$/
      * @param string $requestMethod
      */
-    public function thatIWantToMakeANew($requestMethod): void
+    public function thatIWantToMakeANew(string $requestMethod): void
     {
-        $this->requestMethod = 'post';
+        $this->requestMethod = $requestMethod;
     }
 
     /**
      * @When I send :arg1 request to :arg2
+     * @param string $requestMethod
      * @param string $pageUrl
-     * @throws RequestException
      */
     public function iSendRequestTo(string $requestMethod, string $pageUrl): void
     {
