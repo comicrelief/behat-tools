@@ -2,9 +2,9 @@
 
 namespace Comicrelief\Behat\Context;
 
-use Comicrelief\Behat\Utils\Webconnector;
+use Comicrelief\Behat\Utils\TestDataHandler;
 
-class RawContext extends Webconnector
+class RawContext extends TestDataHandler
 {
 
     /**
@@ -56,10 +56,5 @@ class RawContext extends Webconnector
     {
         $this->getSession()->switchToWindow(end($windowNames));
     }
-
-
-
-
-
 
 }

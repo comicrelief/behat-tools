@@ -9,7 +9,7 @@ use Behat\MinkExtension\Context\RawMinkContext;
  * Class Webconnector
  * @package utils
  */
-class Webconnector extends RawMinkContext
+class TestDataHandler extends RawMinkContext
 {
     /* @var array */
     protected static $testData = [];
