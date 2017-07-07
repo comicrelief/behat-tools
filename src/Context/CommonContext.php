@@ -5,14 +5,27 @@ namespace Comicrelief\Behat\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\MinkExtension\Context\RawMinkContext;
 use Comicrelief\Behat\Utils\TestDataHandler;
 use Exception;
 use Faker;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 
-class CommonContext extends TestDataHandler
+class CommonContext extends RawMinkContext
 {
+    protected $testDataHandler;
+    protected $rawContext;
+
+
+    /**
+     * CommonContext constructor.
+     */
+    public function __construct() {
+        $this->testDataHandler = new TestDataHandler;
+        $this->rawContext = new RawContext;
+    }
 
     /**
      * Waits for the given amount of time in milliseconds
@@ -93,10 +106,9 @@ class CommonContext extends TestDataHandler
                 $context->assertSession()->elementExists('css', $locator);
                 return true;
             }
-            catch (ElementNotFoundException $e) {
-
+            catch (RuntimeException $e) {
+                throw new Exception('The element with css ' .$locator .' do not appear on the page ' .$e);
             }
-            return false;
         });
     }
 
@@ -111,10 +123,9 @@ class CommonContext extends TestDataHandler
                 $context->assertSession()->elementNotExists('css', $locator);
                 return true;
             }
-            catch (ElementNotFoundException $e) {
-
+            catch (RuntimeException $e) {
+                throw New Exception('The element with css ' .$locator .' do not disappear from the page ' .$e);
             }
-            return false;
         });
     }
 
@@ -129,10 +140,9 @@ class CommonContext extends TestDataHandler
                 $context->assertSession()->pageTextContains($text);
                 return true;
             }
-            catch (ElementNotFoundException $e) {
-
+            catch (RuntimeException $e) {
+                throw new Exception('The text "' .$text .'" do not appear on the page ' .$e);
             }
-            return false;
         });
     }
 
@@ -147,10 +157,9 @@ class CommonContext extends TestDataHandler
                 $context->assertSession()->pageTextNotContains($text);
                 return true;
             }
-            catch (ElementNotFoundException $e) {
-
+            catch (RuntimeException $e) {
+                throw new Exception('The text "' .$text .'" do not disappear from the page ' .$e);
             }
-            return false;
         });
     }
 
@@ -161,7 +170,7 @@ class CommonContext extends TestDataHandler
      */
     public function iClickOnElement(string $field): void
     {
-        $this->findElementByCss($field)->click();
+        $this->rawContext->findElementByCss($field)->click();
     }
 
     /**
@@ -171,7 +180,7 @@ class CommonContext extends TestDataHandler
      */
     public function iDoubleClickOnElement(string $field): void
     {
-        $this->findElementByCss($field)->doubleClick();
+        $this->rawContext->findElementByCss($field)->doubleClick();
     }
 
     /**
@@ -192,8 +201,8 @@ class CommonContext extends TestDataHandler
             $word = $faker->word;
         }
 
-        $this->addTestData($value, $word);
-        $this->findElementByCss($locator)->setValue($this->getTestData($value));
+        $this->testDataHandler->addTestData($value, $word);
+        $this->rawContext->findElementByCss($locator)->setValue($this->testDataHandler->getTestData($value));
     }
 
     /**
@@ -203,8 +212,8 @@ class CommonContext extends TestDataHandler
      */
     public function iFillConfirmTestDataInField(string $value, string $locator): void
     {
-        $this->findElementByCss($locator)->setValue($this->getTestData($value));
-        $this->addTestData('confirm' .$value, $this->getTestData($value));
+        $this->rawContext->findElementByCss($locator)->setValue($this->testDataHandler->getTestData($value));
+        $this->testDataHandler->addTestData('confirm' .$value, $this->testDataHandler->getTestData($value));
     }
 
     /**
@@ -216,8 +225,8 @@ class CommonContext extends TestDataHandler
      */
     public function iReadValueFromField(string $value, string $locator): void
     {
-        $fieldValue = $this->findElementByCss($locator)->getValue();
-        $this->addTestData($value, $fieldValue);
+        $fieldValue = $this->rawContext->findElementByCss($locator)->getValue();
+        $this->testDataHandler->addTestData($value, $fieldValue);
     }
 
     /**
@@ -307,8 +316,8 @@ class CommonContext extends TestDataHandler
      */
     public function iShouldSeeTestDataInElement(string $value, string $selector): void
     {
-        $elementHtml = $this->findElementByCss($selector)->getHtml();
-        $text = $this->getTestData($value);
+        $elementHtml = $this->rawContext->findElementByCss($selector)->getHtml();
+        $text = $this->testDataHandler->getTestData($value);
         if ($text !== ''){
             TestCase::assertContains($text, $elementHtml,
                 'The text ' .$text .' was not found in the html of the element matching css ' .$selector);

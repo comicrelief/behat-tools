@@ -2,9 +2,10 @@
 
 namespace Comicrelief\Behat\Context;
 
+use Behat\MinkExtension\Context\RawMinkContext;
 use Comicrelief\Behat\Utils\TestDataHandler;
 
-class RawContext extends TestDataHandler
+class RawContext extends RawMinkContext
 {
 
     /**
