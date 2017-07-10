@@ -107,7 +107,7 @@ class CommonContext extends RawMinkContext
                 return true;
             }
             catch (RuntimeException $e) {
-                throw new Exception('The element with css ' .$locator .' do not appear on the page ' .$e);
+                throw new \RuntimeException('The element with css ' .$locator .' do not appear on the page ' .$e);
             }
         });
     }
@@ -124,7 +124,7 @@ class CommonContext extends RawMinkContext
                 return true;
             }
             catch (RuntimeException $e) {
-                throw New Exception('The element with css ' .$locator .' do not disappear from the page ' .$e);
+                throw New \RuntimeException('The element with css ' .$locator .' do not disappear from the page ' .$e);
             }
         });
     }
@@ -141,7 +141,7 @@ class CommonContext extends RawMinkContext
                 return true;
             }
             catch (RuntimeException $e) {
-                throw new Exception('The text "' .$text .'" do not appear on the page ' .$e);
+                throw new \RuntimeException('The text "' .$text .'" do not appear on the page ' .$e);
             }
         });
     }
@@ -158,7 +158,7 @@ class CommonContext extends RawMinkContext
                 return true;
             }
             catch (RuntimeException $e) {
-                throw new Exception('The text "' .$text .'" do not disappear from the page ' .$e);
+                throw new \RuntimeException('The text "' .$text .'" do not disappear from the page ' .$e);
             }
         });
     }
