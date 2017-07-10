@@ -357,4 +357,12 @@ class CommonContext extends RawMinkContext
         $this->getSession()->restart();
     }
 
+    /**
+     * @Then /^I refresh the browser$/
+     */
+    public function iRefreshTheBrowser(): void
+    {
+        $this->getSession()->reload();
+    }
+
 }
