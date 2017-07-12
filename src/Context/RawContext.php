@@ -2,11 +2,14 @@
 
 namespace Comicrelief\Behat\Context;
 
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Comicrelief\Behat\Utils\TestDataHandler;
 
 class RawContext extends RawMinkContext
 {
+
+
 
     /**
      * Find element by css
