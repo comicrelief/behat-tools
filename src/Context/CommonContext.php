@@ -3,6 +3,7 @@
 namespace Comicrelief\Behat\Context;
 
 
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\MinkExtension\Context\RawMinkContext;
@@ -15,24 +16,33 @@ use RuntimeException;
 
 class CommonContext extends RawMinkContext
 {
+    /* @var TestDataHandler */
     protected $testDataHandler;
-    protected $rawContext;
 
+    /* @var RawContext */
+    protected $rawContext;
 
     /**
      * CommonContext constructor.
      */
     public function __construct() {
-        $this->testDataHandler = new TestDataHandler;
-        $this->rawContext = new RawContext;
+        $this->testDataHandler = new TestDataHandler();
+    }
+
+    /** @BeforeScenario */
+    public function gatherContexts(BeforeScenarioScope $scope)
+    {
+        $environment = $scope->getEnvironment();
+
+        $this->rawContext = $environment->getContext(RawContext::class);
     }
 
     /**
      * Waits for the given amount of time in milliseconds
-     * Example: When I wait for "1000"
-     * Example: And I wait for "2000"
+     * Example: When I wait for 1000ms
+     * Example: And I wait for 2000ms
      *
-     * @When I wait for :arg1
+     * @When /^I wait for ([\d]+)(?:ms)?$/
      * @param int $time
      */
     public function iWaitFor(int $time): void
@@ -195,8 +205,10 @@ class CommonContext extends RawMinkContext
     {
         $faker = Faker\Factory::create('en_GB');
 
-        if (strpbrk($value, 'email')) {
+        if (strpbrk($value, 'Email')) {
             $word = 'qatester_' . rand(1, 1000000) . '@comicrelieftest.com';
+        } elseif (strpbrk($value, 'Postcode')) {
+            $word = $faker->postcode;
         } else {
             $word = $faker->word;
         }
