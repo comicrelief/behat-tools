@@ -210,7 +210,7 @@ class CommonContext extends RawMinkContext
         } elseif (strpbrk($value, 'Postcode')) {
             $word = $faker->postcode;
         } else {
-            $word = $faker->word;
+            $word = $faker->firstName;
         }
 
         $this->testDataHandler->addTestData($value, $word);
