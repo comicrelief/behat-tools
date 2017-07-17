@@ -205,9 +205,11 @@ class CommonContext extends RawMinkContext
     {
         $faker = Faker\Factory::create('en_GB');
 
-        if (strpbrk($value, 'Email')) {
-            $word = 'qatester_' . rand(1, 1000000) . '@comicrelieftest.com';
-        } elseif (strpbrk($value, 'Postcode')) {
+        $value = strtolower($value);
+
+        if (strpos($value, 'email') !== false) {
+            $word = 'qa-tester_' . rand(1, 1000000) . '@comicrelieftest.com';
+        } elseif (strpos($value, 'postcode') !== false) {
             $word = $faker->postcode;
         } else {
             $word = $faker->firstName;
