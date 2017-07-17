@@ -6,7 +6,7 @@
   "prefer-stable": true,
 
   "require": {
-    "php": ">=7.1",
+    "php": ">=7.0",
     "ext-mbstring": "*",
     "aws/aws-sdk-php": "^3.18",
     "behat/behat": ">=3.3.1",
