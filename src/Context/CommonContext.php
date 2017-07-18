@@ -403,4 +403,21 @@ class CommonContext extends RawMinkContext
         $this->assertSession()->elementNotExists('css', $selector);
     }
 
+    /**
+     * @Then I should see :url page url
+     * @param string $url
+     * @throws \Exception
+     */
+    public function thenIShouldSeePage(string $url): void
+    {
+        $windowNames = $this->getSession()->getWindowNames();
+        if (count($windowNames) > 1) {
+            $this->rawContext->switchToNewTab($windowNames);
+        }
+        $current_url = $this->getSession()->getCurrentUrl();
+        if (!strpos($current_url, $url)) {
+            throw new \Exception("Can not find url $url");
+        }
+    }
+
 }
