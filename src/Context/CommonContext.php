@@ -377,4 +377,47 @@ class CommonContext extends RawMinkContext
         $this->getSession()->reload();
     }
 
+    /**
+     * Check page contains element specified by CSS selector
+     * Example: Then I should see element "username"
+     * Example: And should see element "password"
+     *
+     * @Then /^(?:|I )should see element "(?P<locator>(?:[^"]|\\")*)"$/
+     * @param string $selector
+     */
+    public function iShouldSeeElementByCss($selector): void
+    {
+        $this->assertSession()->elementExists('css', $selector);
+    }
+
+    /**
+     * Check page dooesn't contain element specified by CSS selector
+     * Example: Then I should not see element "username"
+     * Example: And should not see "password" element
+     *
+     * @Then /^(?:|I )should not see element "(?P<locator>(?:[^"]|\\")*)"$/
+     * @param string $selector
+     */
+    public function iShouldNotSeeElementByCss($selector): void
+    {
+        $this->assertSession()->elementNotExists('css', $selector);
+    }
+
+    /**
+     * @Then I should see :url page url
+     * @param string $url
+     * @throws \Exception
+     */
+    public function thenIShouldSeePage(string $url): void
+    {
+        $windowNames = $this->getSession()->getWindowNames();
+        if (count($windowNames) > 1) {
+            $this->rawContext->switchToNewTab($windowNames);
+        }
+        $current_url = $this->getSession()->getCurrentUrl();
+        if (!strpos($current_url, $url)) {
+            throw new \Exception("Can not find url $url");
+        }
+    }
+
 }
