@@ -4,6 +4,7 @@ namespace Comicrelief\Behat\Context;
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
+use Comicrelief\Behat\Utils\TestDataHandler;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use PHPUnit\Framework\TestCase;
@@ -15,15 +16,19 @@ use Psr\Http\Message\ResponseInterface;
  */
 class RestContext implements Context
 {
+    protected $restObject;
     protected $requestUrl;
-    private $requestMethod = 'get';
+    protected $requestMethod = 'get';
+    protected $requestOptions = [];
     /* @var \GuzzleHttp\Client */
-    private $_client;
+    protected $_client;
     /* @var ResponseInterface */
-    private $_response;
-    private $responseBody;
-    private $_parameters;
+    protected $_response;
+    protected $responseBody;
+    protected $_parameters;
     protected $requestPayload;
+    /* @var TestDataHandler */
+    protected $testDataHandler;
 
     public function __construct(string $baseUrl)
     {
@@ -31,6 +36,8 @@ class RestContext implements Context
 
         $this->_client = new Client();
         $this->_parameters = $parameters;
+        $this->testDataHandler = new TestDataHandler();
+        $this->restObject  = new \stdClass();
     }
 
     /**
@@ -43,7 +50,7 @@ class RestContext implements Context
     }
 
     /**
-     * @When I send :arg1 request to :arg2
+     * @When I send a :arg1 request to :arg2
      * @param string $requestMethod
      * @param string $pageUrl
      */
@@ -53,10 +60,29 @@ class RestContext implements Context
 
         $this->requestUrl = $baseUrl . $pageUrl;
 
-        try {
-            $this->_response = $this->_client->request($requestMethod, $this->requestUrl);
-        } catch (RequestException $e) {
-            $this->_response = $e->getResponse();
+        switch (strtoupper($requestMethod)) {
+            case 'GET':
+                $this->_response = $this->_client->get(
+                    $this->requestUrl . '?' . http_build_query((array) $this->restObject),
+                    $this->requestOptions
+                );
+                break;
+            case 'POST':
+                try {
+                    $this->_response = $this->_client->post(
+                        $this->requestUrl,
+                        ['body' => $this->requestPayload, 'verify' => false]
+                    );
+                } catch (RequestException $e) {
+                    $this->_response = $e->getResponse();
+                }
+                break;
+            case 'DELETE':
+                $this->_response = $this->_client->delete(
+                    $this->requestUrl . '?' . http_build_query((array) $this->restObject),
+                    $this->requestOptions
+                );
+                break;
         }
     }
 

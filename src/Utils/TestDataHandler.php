@@ -2,9 +2,6 @@
 
 namespace Comicrelief\Behat\Utils;
 
-
-use Behat\MinkExtension\Context\RawMinkContext;
-
 /**
  * Class Webconnector
  * @package utils
@@ -53,6 +50,4 @@ class TestDataHandler
     {
         self::$testData = $value;
     }
-
-
 }
