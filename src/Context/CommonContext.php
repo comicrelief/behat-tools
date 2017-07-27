@@ -349,6 +349,15 @@ class CommonContext extends RawMinkContext
         $this->getSession()->switchToIFrame($arg1);
     }
 
+  /**
+   * iFrame with no name attribute
+   * Switch to iFrame with css locator
+   * @Then switch to :locator iframe
+   */
+  public function switchToIframe($locator){
+    $this->iSwitchToIFrameWithCSSLocator($locator);
+  }
+
     /**
      * Switches to the main window from an iframe
      *

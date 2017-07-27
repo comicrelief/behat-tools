@@ -61,4 +61,28 @@ class RawContext extends RawMinkContext
         $this->getSession()->switchToWindow(end($windowNames));
     }
 
+  /**
+   * switch to iframe with css :locator
+   * @param String $locator
+   */
+  public function iSwitchToIFrameWithCSSLocator($locator)
+  {
+    $iframe = $this->getSession()->getPage()->find("css", $locator);
+    $iframeName = $iframe->getAttribute("name");
+    if ($iframeName == "") {
+      $javascript = "(function(){
+            var iframes = document.getElementsByTagName('iframe');
+            for (var i = 0; i < iframes.length; i++) {
+                iframes[i].name = 'iframe_number_' + (i + 1) ;
+            }
+            })()";
+      $this->getSession()->executeScript($javascript);
+      $iframe = $this->getSession()->getPage()->find("css", $locator);
+      $iframeName = $iframe->getAttribute("name");
+    } else {
+      throw new \Exception("iFrame already has a name: " . $iframeName);
+    }
+    $this->getSession()->getDriver()->switchToIFrame($iframeName);
+  }
+
 }
