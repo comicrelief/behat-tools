@@ -2,10 +2,13 @@
 
 namespace Comicrelief\Behat\Context;
 
-use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\MinkExtension\Context\RawMinkContext;
-use Comicrelief\Behat\Utils\TestDataHandler;
 
+/**
+ * Class RawContext
+ *
+ * @package Comicrelief\Behat\Context
+ */
 class RawContext extends RawMinkContext
 {
 
@@ -64,6 +67,7 @@ class RawContext extends RawMinkContext
   /**
    * switch to iframe with css :locator
    * @param String $locator
+   * @throws \Exception
    */
   public function iSwitchToIFrameWithCSSLocator($locator)
   {

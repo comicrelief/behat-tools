@@ -2,11 +2,7 @@
 
 namespace Comicrelief\Behat\Context;
 
-
-use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
-use Behat\Mink\Exception\ElementNotFoundException;
-use Behat\MinkExtension\Context\RawMinkContext;
 use Comicrelief\Behat\Utils\TestDataHandler;
 use Exception;
 use Faker;
@@ -199,14 +195,10 @@ class CommonContext extends RawContext
       $word = 'qa-tester_' . rand(1, 1000000) . '@comicrelieftest.com';
     } elseif (strpos(strtolower($value), 'postcode') !== false) {
       $word = $faker->postcode;
-    } elseif (strpos(strtolower($value), 'firstname') !== false) {
-      $word = $faker->firstName;
-    } elseif (strpos(strtolower($value), 'lastname') !== false) {
-      $word = $faker->lastName;
-    } elseif (strpos(strtolower($value), 'subject') !== false) {
+    } elseif (strpos(strtolower($value), 'text') !== false) {
       $word = $faker->text;
-    } elseif (strpos(strtolower($value), 'message') !== false) {
-      $word = $faker->text();
+    } else {
+      $word = $faker->firstName;
     }
 
     $this->testDataHandler->addTestData($value, $word);
@@ -347,7 +339,7 @@ class CommonContext extends RawContext
 
   /**
    * Switch to a given iFrame with css locator
-   * @Then switch to :locator iframe
+   * @Then switch to iframe with css :locator
    */
   public function switchToIframeCSS($locator){
     $this->iSwitchToIFrameWithCSSLocator($locator);
