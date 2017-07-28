@@ -3,8 +3,6 @@
 namespace Comicrelief\Behat\Context;
 
 use Behat\Gherkin\Node\TableNode;
-use Comicrelief\Behat\Utils\TestDataHandler;
-use Exception;
 use Faker;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -12,15 +10,6 @@ use RuntimeException;
 
 class CommonContext extends RawContext
 {
-  /* @var TestDataHandler */
-  protected $testDataHandler;
-
-  /**
-   * CommonContext constructor.
-   */
-  public function __construct() {
-    $this->testDataHandler = new TestDataHandler();
-  }
 
   /**
    * Waits for the given amount of time in milliseconds
@@ -59,35 +48,6 @@ class CommonContext extends RawContext
   public function cancelPopup()
   {
     $this->getSession()->getDriver()->getWebDriverSession()->dismiss_alert();
-  }
-
-  /**
-   * Spin method to loop
-   * @param $lambda
-   * @param int $wait
-   * @return bool
-   * @throws Exception
-   */
-  public function spin ($lambda, $wait = 240)
-  {
-    for ($i = 0; $i < $wait; $i++)
-    {
-      try {
-        if ($lambda($this)) {
-          return true;
-        }
-      } catch (Exception $e) {
-        // do nothing
-      }
-
-      usleep(250000); // 0.25 seconds
-    }
-
-    $backtrace = debug_backtrace();
-
-    throw new Exception(
-      "Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function']
-    );
   }
 
   /**
@@ -180,7 +140,7 @@ class CommonContext extends RawContext
 
   /**
    * Fills in a random word in a field and add it to test data array
-   * Example: When I fill test data "John" in "firtname" field
+   * Example: When I fill test data "John" in "firstname" field
    *
    * @When I fill test data :arg1 in :arg2 field
    * @param string $value
@@ -197,7 +157,11 @@ class CommonContext extends RawContext
       $word = $faker->postcode;
     } elseif (strpos(strtolower($value), 'text') !== false) {
       $word = $faker->text;
-    } else {
+    } elseif (strpos(strtolower($value), 'url') !== false) {
+      $word = $faker->url;
+    } elseif (strpos(strtolower($value), 'id') !== false) {
+      $word = $faker->uuid;
+    }else {
       $word = $faker->firstName;
     }
 
@@ -414,6 +378,23 @@ class CommonContext extends RawContext
     if (!strpos($current_url, $url)) {
       throw new \Exception("Can not find url $url");
     }
+  }
+
+  /**
+   * Mouse hover with specified CSS locator
+   * @When /^I hover over the element "([^"]*)"$/
+   * @param string $locator
+   * @throws \Exception
+   */
+  public function iHoverOverTheElement($locator)
+  {
+    $session = $this->getSession(); // get the mink session
+    $element = $session->getPage()->find('css', $locator); // runs the actual query and returns the element
+
+    if (null === $element) {
+      throw new \InvalidArgumentException(sprintf('Could not evaluate CSS selector: "%s"', $locator));
+    }
+    $element->mouseOver();
   }
 
 }
