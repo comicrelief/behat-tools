@@ -380,4 +380,21 @@ class CommonContext extends RawContext
     }
   }
 
+  /**
+   * Mouse hover with specified CSS locator
+   * @When /^I hover over the element "([^"]*)"$/
+   * @param string $locator
+   * @throws \Exception
+   */
+  public function iHoverOverTheElement($locator)
+  {
+    $session = $this->getSession(); // get the mink session
+    $element = $session->getPage()->find('css', $locator); // runs the actual query and returns the element
+
+    if (null === $element) {
+      throw new \InvalidArgumentException(sprintf('Could not evaluate CSS selector: "%s"', $locator));
+    }
+    $element->mouseOver();
+  }
+
 }
