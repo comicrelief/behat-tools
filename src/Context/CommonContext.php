@@ -157,7 +157,11 @@ class CommonContext extends RawContext
       $word = $faker->postcode;
     } elseif (strpos(strtolower($value), 'text') !== false) {
       $word = $faker->text;
-    } else {
+    } elseif (strpos(strtolower($value), 'url') !== false) {
+      $word = $faker->url;
+    } elseif (strpos(strtolower($value), 'id') !== false) {
+      $word = $faker->uuid;
+    }else {
       $word = $faker->firstName;
     }
 
@@ -374,6 +378,23 @@ class CommonContext extends RawContext
     if (!strpos($current_url, $url)) {
       throw new \Exception("Can not find url $url");
     }
+  }
+
+  /**
+   * Mouse hover with specified CSS locator
+   * @When /^I hover over the element "([^"]*)"$/
+   * @param string $locator
+   * @throws \Exception
+   */
+  public function iHoverOverTheElement($locator)
+  {
+    $session = $this->getSession(); // get the mink session
+    $element = $session->getPage()->find('css', $locator); // runs the actual query and returns the element
+
+    if (null === $element) {
+      throw new \InvalidArgumentException(sprintf('Could not evaluate CSS selector: "%s"', $locator));
+    }
+    $element->mouseOver();
   }
 
 }
