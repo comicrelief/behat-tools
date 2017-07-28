@@ -157,7 +157,11 @@ class CommonContext extends RawContext
       $word = $faker->postcode;
     } elseif (strpos(strtolower($value), 'text') !== false) {
       $word = $faker->text;
-    } else {
+    } elseif (strpos(strtolower($value), 'url') !== false) {
+      $word = $faker->url;
+    } elseif (strpos(strtolower($value), 'id') !== false) {
+      $word = $faker->uuid;
+    }else {
       $word = $faker->firstName;
     }
 
