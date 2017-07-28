@@ -3,25 +3,36 @@
 namespace Comicrelief\Behat\Context;
 
 use Behat\MinkExtension\Context\RawMinkContext;
+use Comicrelief\Behat\Utils\TestDataHandler;
+use Exception;
 
 /**
  * Class RawContext
  *
  * @package Comicrelief\Behat\Context
  */
-class RawContext extends RawMinkContext
-{
+class RawContext extends RawMinkContext {
 
+  /* @var TestDataHandler */
+  protected $testDataHandler;
+
+  /**
+   * CommonContext constructor.
+   */
+  public function __construct() {
+    $this->testDataHandler = new TestDataHandler();
+  }
 
 
   /**
    * Find element by css
+   *
    * @param string $locator
+   *
    * @return \Behat\Mink\Element\NodeElement|mixed|null
    * @throws \Exception
    */
-  public function findElementByCss(string $locator)
-  {
+  public function findElementByCss(string $locator) {
     $element = $this->getSession()->getPage()->find('css', $locator);
 
     if (!$element) {
@@ -33,12 +44,13 @@ class RawContext extends RawMinkContext
 
   /**
    * Get text of an element by css
+   *
    * @param string $locator
+   *
    * @return null|string
    */
-  public function getTextByCss(string $locator)
-  {
-    $text = null;
+  public function getTextByCss(string $locator) {
+    $text = NULL;
     try {
       $text = $this->getSession()->getPage()->find('css', $locator)->getText();
     } catch (\Exception $e) {
@@ -50,8 +62,7 @@ class RawContext extends RawMinkContext
   /**
    *Get the current window name
    */
-  public function getCurrentWindowName()
-  {
+  public function getCurrentWindowName() {
     $windowName = $this->getSession()->getWindowName();
     return $windowName;
   }
@@ -59,18 +70,18 @@ class RawContext extends RawMinkContext
   /**
    * @param Switch to new tab
    */
-  public function switchToNewTab($windowNames)
-  {
+  public function switchToNewTab($windowNames) {
     $this->getSession()->switchToWindow(end($windowNames));
   }
 
   /**
    * switch to iframe with css :locator
+   *
    * @param String $locator
+   *
    * @throws \Exception
    */
-  public function iSwitchToIFrameWithCSSLocator($locator)
-  {
+  public function iSwitchToIFrameWithCSSLocator($locator) {
     $iframe = $this->getSession()->getPage()->find("css", $locator);
     $iframeName = $iframe->getAttribute("name");
     if ($iframeName == "") {
@@ -83,10 +94,40 @@ class RawContext extends RawMinkContext
       $this->getSession()->executeScript($javascript);
       $iframe = $this->getSession()->getPage()->find("css", $locator);
       $iframeName = $iframe->getAttribute("name");
-    } else {
+    }
+    else {
       throw new \Exception("iFrame already has a name: " . $iframeName);
     }
     $this->getSession()->getDriver()->switchToIFrame($iframeName);
+  }
+
+  /**
+   * Spin method to loop
+   *
+   * @param $lambda
+   * @param int $wait
+   *
+   * @return bool
+   * @throws Exception
+   */
+  public function spin($lambda, $wait = 240) {
+    for ($i = 0; $i < $wait; $i++) {
+      try {
+        if ($lambda($this)) {
+          return TRUE;
+        }
+      } catch (Exception $e) {
+        // do nothing
+      }
+
+      usleep(250000); // 0.25 seconds
+    }
+
+    $backtrace = debug_backtrace();
+
+    throw new Exception(
+      "Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function']
+    );
   }
 
 }
