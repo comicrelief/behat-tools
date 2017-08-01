@@ -162,7 +162,7 @@ class CommonContext extends RawContext
     } elseif (strpos(strtolower($value), 'id') !== false) {
       $word = $faker->uuid;
     }else {
-      $word = $faker->firstName;
+      $word = $faker->bothify('?????####');
     }
 
     $this->testDataHandler->addTestData($value, $word);
