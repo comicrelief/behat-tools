@@ -3,8 +3,8 @@
 namespace Comicrelief\Behat\Context;
 
 
-class MetaTagContext extends RawContext
-{
+class MetaTagContext extends RawContext {
+
   /**
    * Match attribute content in specified css locator
    *
@@ -16,15 +16,14 @@ class MetaTagContext extends RawContext
    *
    * @throws \Exception
    */
-  public function ogMetaContentMatch($locator, $expectContent)
-  {
-    $ogNode = $this->getSession()->getPage()->find('css',$locator);
-    if (!$ogNode){
+  public function ogMetaContentMatch($locator, $expectContent) {
+    $ogNode = $this->getSession()->getPage()->find('css', $locator);
+    if (!$ogNode) {
       throw new \Exception("Can not find css locator: $locator");
     }
 
     $ogContent = $ogNode->getAttribute('content');
-    if ( trim($ogContent) != trim($expectContent) ){
+    if (trim($ogContent) != trim($expectContent)) {
       throw new \Exception("Can not find og meta content: $expectContent");
     }
 
@@ -35,8 +34,7 @@ class MetaTagContext extends RawContext
    *
    * @throws \Exception
    */
-  public function checkForOgMetaTags()
-  {
+  public function checkForOgMetaTags() {
 
     $curUrl = $this->getSession()->getCurrentUrl();
     $statusCode = $this->getSession()->getStatusCode();
@@ -44,13 +42,17 @@ class MetaTagContext extends RawContext
       throw new \Exception("HTTP ERROR $statusCode : $curUrl");
     }
 
-    $ogTitleNode = $this->getSession()->getPage()->find('css',"meta[property='og:title']");
-    if (!$ogTitleNode){
+    $ogTitleNode = $this->getSession()
+      ->getPage()
+      ->find('css', "meta[property='og:title']");
+    if (!$ogTitleNode) {
       throw new \Exception("Can not find property og:title");
     }
 
-    $ogURLNode = $this->getSession()->getPage()->find('css',"meta[property='og:url']");
-    if (!$ogURLNode){
+    $ogURLNode = $this->getSession()
+      ->getPage()
+      ->find('css', "meta[property='og:url']");
+    if (!$ogURLNode) {
       throw new \Exception("Can not find property og:url");
     }
 
@@ -61,16 +63,41 @@ class MetaTagContext extends RawContext
       throw new \Exception("Can not find property og:description");
     }
 
-    $ogTypeNode = $this->getSession()->getPage()->find('css',"meta[property='og:type']");
-    if (!$ogTypeNode){
+    $ogTypeNode = $this->getSession()
+      ->getPage()
+      ->find('css', "meta[property='og:type']");
+    if (!$ogTypeNode) {
       throw new \Exception("Can not find property og:type");
     }
 
-    $ogSiteNameNode = $this->getSession()->getPage()->find('css',"meta[property='og:site_name']");
-    if (!$ogTypeNode){
+    $ogSiteNameNode = $this->getSession()
+      ->getPage()
+      ->find('css', "meta[property='og:site_name']");
+    if (!$ogTypeNode) {
       throw new \Exception("Can not find property og:site_name");
     }
 
   }
+
+  /**
+   * @Then /^the metatag attribute "(?P<attribute>[^"]*)" should have the value "(?P<value>[^"]*)"$/
+   *
+   * @throws \Exception
+   *   If region or link within it cannot be found.
+   */
+  public function assertMetaRegion($metatag, $value) {
+    $this->assertMetaRegionGeneric('name', $metatag, $value, 'equals');
+  }
+
+  /**
+   * @Then /^the metatag property "(?P<attribute>[^"]*)" should contain the value "(?P<value>[^"]*)"$/
+   *
+   * @throws \Exception
+   *   If region or link within it cannot be found.
+   */
+  public function assertMetaRegionPropertyContains($metatag, $value) {
+    $this->assertMetaRegionGeneric('property', $metatag, $value, 'contains');
+  }
+
 
 }

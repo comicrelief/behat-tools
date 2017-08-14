@@ -130,4 +130,69 @@ class RawContext extends RawMinkContext {
     );
   }
 
+  /**
+   * Helper function to generalize metatag behat tests
+   *
+   * @throws \Exception
+   */
+  public function assertMetaRegionGeneric($type, $metatag, $value, $comparison) {
+    $element = $this->getSession()
+      ->getPage()
+      ->find('xpath', '/head/meta[@' . $type . '="' . $metatag . '"]');
+    if ($element) {
+      $contentValue = $element->getAttribute('content');
+      if ($comparison == 'equals' && $value == $contentValue) {
+        $result = $value;
+      }
+      else {
+        if ($comparison == 'contains' && strpos($contentValue, $value) !== FALSE) {
+          $result = $value;
+        }
+      }
+    }
+    if (empty($result)) {
+      throw new \Exception(sprintf('Metatag "%s" expected to be "%s", but found "%s" on the page %s', $metatag, $value, $element->getText(), $this->getSession()
+        ->getCurrentUrl()));
+    }
+  }
+
+  /**
+   * Check page all links HTTP response code 200
+   *
+   * @throws \Exception
+   */
+
+  public function checkHttpResponseCode() {
+    $curUrl = $this->getSession()->getCurrentUrl();
+    $statusCode = $this->getSession()->getStatusCode();
+    if ($statusCode !== 200) {
+      throw new \Exception("HTTP ERROR $statusCode : $curUrl");
+    }
+    $elementA = $this->getSession()
+      ->getPage()
+      ->find('css', 'main')
+      ->findAll('css', 'a');
+
+    foreach ($elementA as $a) {
+      $this->getSession()->visit($curUrl);
+      $linkUrl = trim($a->getAttribute('href'));
+      $linkText = $a->getText();
+      if (strlen($linkUrl) > 0) {
+        if (!strpos($linkUrl, '.mp4') && !strpos($linkUrl, '.pdf')
+          && !strpos($linkUrl, '.docx') && !strpos($linkUrl, '.doc')
+          && !strpos($linkUrl, '.ppt') && !strpos($linkUrl, '.zip')
+          && !strpos($linkUrl, '.png') && !(strpos($linkUrl,
+              'mailto:') === 0)
+        ) {
+          $this->getSession()->visit($linkUrl);
+          $statusCode = $this->getSession()->getStatusCode();
+          if ($statusCode !== 200) {
+            throw new \Exception("HTTP ERROR $statusCode : '$linkText' link in '$curUrl' page");
+          }
+        }
+      }
+    }
+
+  }
+
 }
