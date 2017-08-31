@@ -400,4 +400,16 @@ class CommonContext extends RawContext
     $element->mouseOver();
   }
 
+    /**
+     * @When /^(?:|I )should see "([^"]*)" in alert/
+     * @param string $message The message.
+     * @throws \Exception
+     */
+    public function assertAlertMessage($message)
+    {
+        $alertText = $this->getSession()->getDriver()->getWebDriverSession()->getAlert_text();
+        if ($alertText !== $message){
+            throw new \Exception("Modal dialog present: $alertText, when expected was $message");
+        }
+    }
 }
