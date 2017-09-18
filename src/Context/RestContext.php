@@ -243,9 +243,9 @@ class RestContext implements Context
     }
 
    /**
-   * @Then I should see :text in the JSON
+   * @Then I should see :text somewhere in the response
    */
-  public function iShouldSeeInTheJson($text)
+  public function iShouldSeeInResponse($text)
   {
     $this->_response->getBody()->rewind();
     $result = $this->_response->getBody()->getContents();
