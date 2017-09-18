@@ -252,4 +252,16 @@ class RestContext implements Context
                 ' (actual: '.$header1[0].')');
         }
     }
+
+    /**
+     * @Then I should see :text somewhere in the response
+     */
+    public function iShouldSeeInResponse($text)
+    {
+        $this->_response->getBody()->rewind();
+        $result = $this->_response->getBody()->getContents();
+
+        TestCase::assertContains($text, $result,
+            'Failed: The response does not contain expected value ' . $text);
+    }
 }
