@@ -245,11 +245,10 @@ class RestContext implements Context
    /**
    * @Then I should see :text in the JSON
    */
-  public function iShouldSee($text)
+  public function iShouldSeeInTheJson($text)
   {
-      $responseData = $this->_response->getBody();
-      $responseData = \GuzzleHttp\json_decode($responseData, true);
-      $result = json_encode($responseData);
+    $this->_response->getBody()->rewind();
+    $result = $this->_response->getBody()->getContents();
 
       TestCase::assertContains($text, $result,
           'Failed: The response does not contain expected value ' . $text);
