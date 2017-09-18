@@ -86,6 +86,17 @@ class RestContext implements Context
         }
     }
 
+  /**
+   * @When I send a :method request to :url with :query
+   * @param string $requestMethod
+   * @param string $pageUrl
+   */
+  public function iSendRequestWithQuery(string $requestMethod, string $pageUrl, string $query): void
+  {
+      $this->requestOptions = json_decode($query, true);
+      $this->iSendRequestTo($requestMethod, $pageUrl);
+  }
+
     /**
      * @Then /^the response should be in JSON format$/
      * @throws \RuntimeException
