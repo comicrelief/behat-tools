@@ -241,4 +241,17 @@ class RestContext implements Context
                 ' (actual: '.$header1[0].')');
         }
     }
+
+   /**
+   * @Then I should see :text
+   */
+  public function iShouldSee($text)
+  {
+      $responseData = $this->_response->getBody();
+      $responseData = \GuzzleHttp\json_decode($responseData, true);
+      $result = json_encode($responseData);
+
+      TestCase::assertContains($text, $result,
+          'Failed: The response does not contain expected value ' . $text);
+  }
 }
