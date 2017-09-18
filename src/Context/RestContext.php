@@ -243,7 +243,7 @@ class RestContext implements Context
     }
 
    /**
-   * @Then I should see :text
+   * @Then I should see :text in the JSON
    */
   public function iShouldSee($text)
   {
