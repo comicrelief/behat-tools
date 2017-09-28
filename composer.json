@@ -1,7 +1,7 @@
 {
   "name": "comicrelief/behat-tools",
   "description": "QA Behat tools",
-  "license": "proprietary",
+  "license": "MIT",
   "minimum-stability": "dev",
   "prefer-stable": true,
 
@@ -40,7 +40,6 @@
   },
 
   "config": {
-    "optimize-autoloader": true,
     "sort-packages": true
   }
 }
