@@ -26,6 +26,7 @@ class RestContext implements Context
     protected $_response;
     protected $responseBody;
     protected $_parameters;
+    /* @var array */
     protected $requestPayload;
     /* @var TestDataHandler */
     protected $testDataHandler;
@@ -72,7 +73,8 @@ class RestContext implements Context
                     $this->_response = $this->_client->post(
                         $this->requestUrl,
                         [
-                            'form_params' => $this->requestPayload,
+                            /* requestPayload is an array of the JSON */
+                            'json' => $this->requestPayload,
                             'verify' => false
                         ]
                     );
