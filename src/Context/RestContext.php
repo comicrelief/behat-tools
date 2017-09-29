@@ -3,7 +3,7 @@
 namespace Comicrelief\Behat\Context;
 
 use Behat\Behat\Context\Context;
-use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
 use Comicrelief\Behat\Utils\TestDataHandler;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -26,6 +26,7 @@ class RestContext implements Context
     protected $_response;
     protected $responseBody;
     protected $_parameters;
+    /* @var array */
     protected $requestPayload;
     /* @var TestDataHandler */
     protected $testDataHandler;
@@ -37,7 +38,7 @@ class RestContext implements Context
         $this->_client = new Client();
         $this->_parameters = $parameters;
         $this->testDataHandler = new TestDataHandler();
-        $this->restObject  = new \stdClass();
+        $this->restObject = new \stdClass();
     }
 
     /**
@@ -63,7 +64,7 @@ class RestContext implements Context
         switch (strtoupper($requestMethod)) {
             case 'GET':
                 $this->_response = $this->_client->get(
-                    $this->requestUrl . '?' . http_build_query((array) $this->restObject),
+                    $this->requestUrl . '?' . http_build_query((array)$this->restObject),
                     $this->requestOptions
                 );
                 break;
@@ -71,7 +72,11 @@ class RestContext implements Context
                 try {
                     $this->_response = $this->_client->post(
                         $this->requestUrl,
-                        ['body' => $this->requestPayload, 'verify' => false]
+                        [
+                            /* requestPayload is an array of the JSON */
+                            'json' => $this->requestPayload,
+                            'verify' => false
+                        ]
                     );
                 } catch (RequestException $e) {
                     $this->_response = $e->getResponse();
@@ -79,23 +84,26 @@ class RestContext implements Context
                 break;
             case 'DELETE':
                 $this->_response = $this->_client->delete(
-                    $this->requestUrl . '?' . http_build_query((array) $this->restObject),
+                    $this->requestUrl . '?' . http_build_query((array)$this->restObject),
                     $this->requestOptions
                 );
                 break;
         }
     }
 
-  /**
-   * @When I send a :method request to :url with :query
-   * @param string $requestMethod
-   * @param string $pageUrl
-   */
-  public function iSendRequestWithQuery(string $requestMethod, string $pageUrl, string $query): void
-  {
-      $this->requestOptions = json_decode($query, true);
-      $this->iSendRequestTo($requestMethod, $pageUrl);
-  }
+    /**
+     * @When I send a :method request to :url with :query
+     * @param string $requestMethod
+     * @param string $pageUrl
+     */
+    public function iSendRequestWithQuery(
+        string $requestMethod,
+        string $pageUrl,
+        string $query
+    ): void {
+        $this->requestOptions = json_decode($query, true);
+        $this->iSendRequestTo($requestMethod, $pageUrl);
+    }
 
     /**
      * @Then /^the response should be in JSON format$/
@@ -112,11 +120,11 @@ class RestContext implements Context
 
     /**
      * @Given /^I have the payload:$/
-     * @param PyStringNode $requestPayload
+     * @param TableNode $requestPayload
      */
-    public function iHaveThePayload(PyStringNode $requestPayload): void
+    public function iHaveThePayload(TableNode $requestPayload): void
     {
-        $this->requestPayload = $requestPayload;
+        $this->requestPayload = $requestPayload->getRowsHash();
     }
 
     /**
@@ -139,8 +147,8 @@ class RestContext implements Context
      *     $value = Arr::path($array, 'foo.bar');
      *
      * @param   array   array to search
-     * @param   string  $path, dot separated
-     * @param   mixed   $default if the path is not set
+     * @param   string $path , dot separated
+     * @param   mixed $default if the path is not set
      * @return  mixed
      */
     public static function path($array, $path, $default = null)
@@ -212,8 +220,10 @@ class RestContext implements Context
      * @param $property
      * @param $expectedValue
      */
-    public function responseShouldContainExpected($property, $expectedValue): void
-    {
+    public function responseShouldContainExpected(
+        $property,
+        $expectedValue
+    ): void {
         $responseData = $this->_response->getBody();
         $responseData = \GuzzleHttp\json_decode($responseData, true);
 
@@ -234,7 +244,7 @@ class RestContext implements Context
     public function theRestHeaderShouldExist($header)
     {
         if (!$this->_response->hasHeader($header)) {
-            throw new \UnexpectedValueException('HTTP header does not exist '.$header );
+            throw new \UnexpectedValueException('HTTP header does not exist ' . $header);
         }
     }
 
@@ -248,8 +258,8 @@ class RestContext implements Context
     {
         $header1 = $this->_response->getHeader($header);
         if ($header1[0] !== $contents) {
-            throw new \UnexpectedValueException('HTTP header ' . $header . ' does not match '.$contents.
-                ' (actual: '.$header1[0].')');
+            throw new \UnexpectedValueException('HTTP header ' . $header . ' does not match ' . $contents .
+                ' (actual: ' . $header1[0] . ')');
         }
     }
 
