@@ -68,7 +68,6 @@ class RestContext implements Context
                 );
                 break;
             case 'POST':
-                var_dump($this->requestPayload);
                 try {
                     $this->_response = $this->_client->post(
                         $this->requestUrl,
@@ -110,7 +109,6 @@ class RestContext implements Context
      */
     public function theResponseIsJson(): void
     {
-        var_dump($this->_response->getBody()->getContents());
         $this->responseBody = \GuzzleHttp\json_decode($this->_response->getBody());
 
         if (empty($this->responseBody)) {
@@ -125,11 +123,6 @@ class RestContext implements Context
     public function iHaveThePayload(TableNode $requestPayload): void
     {
         $this->requestPayload = $requestPayload->getRowsHash();
-    }
-
-    private function loadX($data)
-    {
-        var_dump($data);
     }
 
     /**
