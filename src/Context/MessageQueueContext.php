@@ -1,8 +1,7 @@
 <?php
 
-namespace BehatTests\features\bootstrap;
+namespace Comicrelief\Behat\Context;
 
-use Comicrelief\Behat\Context\RawContext;
 use Comicrelief\Behat\Utils\TestDataHandler;
 use PHPUnit\Framework\TestCase;
 
