@@ -377,10 +377,14 @@ class CommonContext extends RawContext
     if (count($windowNames) > 1) {
       $this->switchToNewTab($windowNames);
     }
+
     $current_url = $this->getSession()->getCurrentUrl();
     if (!strpos($current_url, $url)) {
       throw new \Exception("Can not find url $url");
     }
+
+    //switch back to main window
+    $this->getSession()->switchToWindow();
   }
 
   /**
