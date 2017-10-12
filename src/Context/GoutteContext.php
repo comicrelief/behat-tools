@@ -31,7 +31,6 @@ class GoutteContext extends RawContext{
     if($urls) {
       foreach ($urls as $url) {
         if ($url && !(strpos($url, 'mailto:') === 0)) {
-          var_dump($url);
           $this->visitPath($url);
           $statusCode = $this->getSession()->getStatusCode();
           if ($statusCode !== 200) {
