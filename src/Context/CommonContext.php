@@ -8,46 +8,51 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 
-class CommonContext extends RawContext {
+class CommonContext extends RawContext
+{
 
-  /**
-   * Waits for the given amount of time in milliseconds
-   * Example: When I wait for 1000ms
-   * Example: And I wait for 2000ms
-   *
-   * @When /^I wait for ([\d]+)(?:ms)?$/
-   * @param int $time
-   */
-  public function iWaitFor(int $time): void{
+    /**
+     * Waits for the given amount of time in milliseconds
+     * Example: When I wait for 1000ms
+     * Example: And I wait for 2000ms
+     *
+     * @When /^I wait for ([\d]+)(?:ms)?$/
+     * @param int $time
+     */
+    public function iWaitFor(int $time): void
+    {
 
-    $this->getSession()->wait($time);
-  }
+        $this->getSession()->wait($time);
+    }
 
-  /**
-   * @Given I maximise the browser window
-   * @throws \Behat\Mink\Exception\DriverException
-   */
-  public function iMaximiseTheBrowserWindow(){
+    /**
+     * @Given I maximise the browser window
+     * @throws \Behat\Mink\Exception\DriverException
+     */
+    public function iMaximiseTheBrowserWindow()
+    {
 
-    $this->getSession()->getDriver()->maximizeWindow();
-    $this->getSession()->wait(5000);
-  }
+        $this->getSession()->getDriver()->maximizeWindow();
+        $this->getSession()->wait(5000);
+    }
 
-  /**
-   * @When /^(?:|I )confirm the popup$/
-   */
-  public function confirmPopup(){
+    /**
+     * @When /^(?:|I )confirm the popup$/
+     */
+    public function confirmPopup()
+    {
 
-    $this->getSession()->getDriver()->getWebDriverSession()->accept_alert();
-  }
+        $this->getSession()->getDriver()->getWebDriverSession()->accept_alert();
+    }
 
-  /**
-   * @When /^(?:|I )cancel the popup$/
-   */
-  public function cancelPopup(){
+    /**
+     * @When /^(?:|I )cancel the popup$/
+     */
+    public function cancelPopup()
+    {
 
-    $this->getSession()->getDriver()->getWebDriverSession()->dismiss_alert();
-  }
+        $this->getSession()->getDriver()->getWebDriverSession()->dismiss_alert();
+    }
 
     /**
      * @Then I wait for :arg element to appear
@@ -117,98 +122,100 @@ class CommonContext extends RawContext {
         });
     }
 
-  /**
-   * Click on the element with given CSS
-   ** @When I click on :arg element
-   ** @param string $field
-   *@throws \Exception
+    /**
+     * Click on the element with given CSS
+     ** @When I click on :arg element
+     ** @param string $field
+     * @throws \Exception
      */
-  public function iClickOnElement(string $field): void
-  {
-    $this->findElementByCss($field)->click();
-  }
+    public function iClickOnElement(string $field): void
+    {
+        $this->findElementByCss($field)->click();
+    }
 
-  /**
-   * Double click on the element with given CSS
-   ** @When I double click on :arg element
-   ** @param string $field
-   *@throws \Exception
+    /**
+     * Double click on the element with given CSS
+     ** @When I double click on :arg element
+     ** @param string $field
+     * @throws \Exception
      */
-  public function iDoubleClickOnElement(string $field): void
-  {
-    $this->findElementByCss($field)->doubleClick();
-  }
-
-  /**
-   * Fills in a random word in a field and add it to test data array
-   * Example: When I fill test data "John" in "firstname" field
-   *
-   * @When I fill test data :arg1 in :arg2 field
-   ** @param string $value
-   * @param string $locator
-   */
-  public function iFillTestDataInField(string $value, string $locator): void{
-
-    $faker = Faker\Factory::create('en_GB');
-    $word = NULL;
-
-    if (strpos(strtolower($value), 'email') !== FALSE) {
-      $word = 'qa-tester_' . rand(1, 1000000) . '@comicrelieftest.com';
-    } elseif (strpos(strtolower($value), 'postcode') !== FALSE) {
-      $word = $faker->postcode;
-    } elseif (strpos(strtolower($value), 'text') !== FALSE) {
-      $word = $faker->text;
-    } elseif (strpos(strtolower($value), 'url') !== FALSE) {
-      $word = $faker->url;
-    } elseif (strpos(strtolower($value), 'id') !== FALSE) {
-      $word = $faker->uuid;
-    } elseif (strpos(strtolower($value), 'phone') !== FALSE) {
-        $word = $faker->phoneNumber;
+    public function iDoubleClickOnElement(string $field): void
+    {
+        $this->findElementByCss($field)->doubleClick();
     }
-    else {
-      $word = $faker->bothify('?????####');
-    }
+
+    /**
+     * Fills in a random word in a field and add it to test data array
+     * Example: When I fill test data "John" in "firstname" field
+     *
+     * @When I fill test data :arg1 in :arg2 field
+     ** @param string $value
+     * @param string $locator
+     */
+    public function iFillTestDataInField(string $value, string $locator): void
+    {
+
+        $faker = Faker\Factory::create('en_GB');
+        $word = NULL;
+
+        if (strpos(strtolower($value), 'email') !== FALSE) {
+            $word = 'qa-tester_' . rand(1, 1000000) . '@comicrelieftest.com';
+        } elseif (strpos(strtolower($value), 'postcode') !== FALSE) {
+            $word = $faker->postcode;
+        } elseif (strpos(strtolower($value), 'text') !== FALSE) {
+            $word = $faker->text;
+        } elseif (strpos(strtolower($value), 'url') !== FALSE) {
+            $word = $faker->url;
+        } elseif (strpos(strtolower($value), 'id') !== FALSE) {
+            $word = $faker->uuid;
+        } elseif (strpos(strtolower($value), 'phone') !== FALSE) {
+            $word = $faker->phoneNumber;
+        } else {
+            $word = $faker->bothify('?????####');
+        }
 
         $this->testDataHandler->addTestData($value, $word);
         $this->findElementByCss($locator)
-      ->setValue($this->testDataHandler->getTestData($value));
+            ->setValue($this->testDataHandler->getTestData($value));
     }
 
-  /**
-   * @When I fill test data :arg1 in :arg2 confirm field
-   ** @param string $value
-   * @param string $locator
-   */
-  public function iFillConfirmTestDataInField(string $value, string $locator): void{
+    /**
+     * @When I fill test data :arg1 in :arg2 confirm field
+     ** @param string $value
+     * @param string $locator
+     */
+    public function iFillConfirmTestDataInField(string $value, string $locator): void
+    {
 
-    $this->findElementByCss($locator)->setValue($this->testDataHandler->getTestData($value));
-    $this->testDataHandler->addTestData('confirm' .$value, $this->testDataHandler->getTestData($value));
-  }
+        $this->findElementByCss($locator)->setValue($this->testDataHandler->getTestData($value));
+        $this->testDataHandler->addTestData('confirm' . $value, $this->testDataHandler->getTestData($value));
+    }
 
-  /**
-   * Reads the value of a field and adds to test data array
-   *
-   * @When I read :arg1 from :arg2 field
-   ** @param string $value
-   * @param string $locator
-   */
-  public function iReadValueFromField(string $value, string $locator): void
-  {
-    $fieldValue = $this->findElementByCss($locator)->getValue();
-    $this->testDataHandler->addTestData($value, $fieldValue);
-  }
+    /**
+     * Reads the value of a field and adds to test data array
+     *
+     * @When I read :arg1 from :arg2 field
+     ** @param string $value
+     * @param string $locator
+     */
+    public function iReadValueFromField(string $value, string $locator): void
+    {
+        $fieldValue = $this->findElementByCss($locator)->getValue();
+        $this->testDataHandler->addTestData($value, $fieldValue);
+    }
 
-  /**
-   * Checks, that page contains elements with specific css selectors
-   * Example: Then I should see below elements:
-   * Example: And I should see below elements:
-   *
-   * @Then I should see below elements:
-   ** @param TableNode $locators
-   */
-  public function assertPageContainsElements(TableNode $locators): void{
+    /**
+     * Checks, that page contains elements with specific css selectors
+     * Example: Then I should see below elements:
+     * Example: And I should see below elements:
+     *
+     * @Then I should see below elements:
+     ** @param TableNode $locators
+     */
+    public function assertPageContainsElements(TableNode $locators): void
+    {
 
-    $elementPresent = NULL;
+        $elementPresent = NULL;
 
         foreach ($locators as $locator) {
             try {
@@ -221,17 +228,18 @@ class CommonContext extends RawContext {
         }
     }
 
-  /**
-   * Checks, that page do not contain elements with specific css selectors
-   * Example: Then I should not see below elements:
-   * Example: And I should not see below elements:
-   *
-   * @Then I should not see below elements:
-   ** @param TableNode $locators
-   */
-  public function assertPageNotContainsElements(TableNode $locators): void{
+    /**
+     * Checks, that page do not contain elements with specific css selectors
+     * Example: Then I should not see below elements:
+     * Example: And I should not see below elements:
+     *
+     * @Then I should not see below elements:
+     ** @param TableNode $locators
+     */
+    public function assertPageNotContainsElements(TableNode $locators): void
+    {
 
-    $elementPresent = NULL;
+        $elementPresent = NULL;
 
         foreach ($locators as $locator) {
             try {
@@ -244,141 +252,148 @@ class CommonContext extends RawContext {
         }
     }
 
-  /**
-   * Checks, that page contains specified text
-   * Example: Then I should see below text:
-   * Example: And I should see below text:
-   *
-   * @Then I should see below text:
-   ** @param TableNode $texts
-   */
-  public function assertPageContainsTexts(TableNode $texts)
-  {
-    foreach ($texts as $text){
-      $actual = $this->getSession()->getPage()->getText();
-      TestCase::assertContains($text['text'], $actual);
+    /**
+     * Checks, that page contains specified text
+     * Example: Then I should see below text:
+     * Example: And I should see below text:
+     *
+     * @Then I should see below text:
+     ** @param TableNode $texts
+     */
+    public function assertPageContainsTexts(TableNode $texts)
+    {
+        foreach ($texts as $text) {
+            $actual = $this->getSession()->getPage()->getText();
+            TestCase::assertContains($text['text'], $actual);
+        }
     }
-  }
 
-  /**
-   * Checks, that page do not contain specified text
-   * Example: Then I should not see below text:
-   * Example: And I should not see below text:
-   *
-   * @Then I should not see below text:
-   ** @param TableNode $texts
-   */
-  public function assertPageDonotContainTexts(TableNode $texts)
-  {
-    foreach ($texts as $text){
-      $actual = $this->getSession()->getPage()->getText();
-      TestCase::assertNotContains($text['text'], $actual);
+    /**
+     * Checks, that page do not contain specified text
+     * Example: Then I should not see below text:
+     * Example: And I should not see below text:
+     *
+     * @Then I should not see below text:
+     ** @param TableNode $texts
+     */
+    public function assertPageDonotContainTexts(TableNode $texts)
+    {
+        foreach ($texts as $text) {
+            $actual = $this->getSession()->getPage()->getText();
+            TestCase::assertNotContains($text['text'], $actual);
+        }
     }
-  }
 
-  /**
-   * Checks, that an element with given css contains specific text
-   *
-   * @Then I should see :arg1 test data in :arg2 element
-   ** @param string $value
-   * @param string $selector
-   */
-  public function iShouldSeeTestDataInElement(string $value, string $selector): void{
+    /**
+     * Checks, that an element with given css contains specific text
+     *
+     * @Then I should see :arg1 test data in :arg2 element
+     ** @param string $value
+     * @param string $selector
+     */
+    public function iShouldSeeTestDataInElement(string $value, string $selector): void
+    {
 
-    $elementHtml = $this->findElementByCss($selector)->getHtml();
-    $text = $this->testDataHandler->getTestData($value);
-    if ($text !== ''){
-      TestCase::assertContains($text, $elementHtml,
-        'The text ' .$text .' was not found in the html of the element matching css ' .$selector);}
-     else {
-      echo 'The field ' .$value .'is empty';
+        $elementHtml = $this->findElementByCss($selector)->getHtml();
+        $text = $this->testDataHandler->getTestData($value);
+        if ($text !== '') {
+            TestCase::assertContains($text, $elementHtml,
+                'The text ' . $text . ' was not found in the html of the element matching css ' . $selector);
+        } else {
+            echo 'The field ' . $value . 'is empty';
+        }
     }
-  }
 
-  /**
-   * Switches to a given iframe with name
-   *
-   * @Given /^I switch to the iframe "([^"]*)"$/
-   * @param string $arg1
-   */
-  public function iSwitchToIframe(string $arg1 = NULL): void
-  {
-    $this->getSession()->switchToIFrame($arg1);
-  }
-
-  /**
-   * Switch to a given iFrame with css locator
-   ** @Then switch to iframe with css :locator
-   */
-  public function switchToIframeCSS($locator)
-    {$this->iSwitchToIFrameWithCSSLocator($locator);
-  }
-
-  /**
-   * Switches to the main window from an iframe
-   *
-   * @Given /^I switch to main window from iframe$/
-   */
-  public function iSwitchToMainWindowFromIframe(): void{
-
-    $this->getSession()->switchToIFrame();
-  }
-
-  /**
-   * Restart the current browser window
-   *
-   * @Then /^I restart the browser$/
-   */
-  public function iRestartTheBrowser(): void{
-
-    $this->getSession()->restart();
-  }
-
-  /**
-   * @Then /^I refresh the browser$/
-   */
-  public function iRefreshTheBrowser(): void{
-
-    $this->getSession()->reload();
-  }
-
-  /**
-   * Check page contains element specified by CSS selector
-   * Example: Then I should see element "username"
-   * Example: And should see element "password"
-   *
-   * @Then /^(?:|I )should see element "(?P<locator>(?:[^"]|\\")*)"$/
-   * @param string $selector
-   */
-  public function iShouldSeeElementByCss($selector): void{
-
-    $this->assertSession()->elementExists('css', $selector);
-  }
-
-  /**
-   * Check page dooesn't contain element specified by CSS selector
-   * Example: Then I should not see element "username"
-   * Example: And should not see "password" element
-   *
-   * @Then /^(?:|I )should not see element "(?P<locator>(?:[^"]|\\")*)"$/
-   * @param string $selector
-   */
-  public function iShouldNotSeeElementByCss($selector): void{
-
-    $this->assertSession()->elementNotExists('css', $selector);
-  }
-
-  /**
-   * @Then I should see :url page url
-   ** @param string $url
-   ** @throws \Exception
-   */
-  public function thenIShouldSeePage(string $url): void
-  {
-    $windowNames = $this->getSession()->getWindowNames();
-    if (count($windowNames) > 1) {
-      $this->switchToNewTab($windowNames);
+    /**
+     * Switches to a given iframe with name
+     *
+     * @Given /^I switch to the iframe "([^"]*)"$/
+     * @param string $arg1
+     */
+    public function iSwitchToIframe(string $arg1 = NULL): void
+    {
+        $this->getSession()->switchToIFrame($arg1);
     }
+
+    /**
+     * Switch to a given iFrame with css locator
+     ** @Then switch to iframe with css :locator
+     */
+    public function switchToIframeCSS($locator)
+    {
+        $this->iSwitchToIFrameWithCSSLocator($locator);
+    }
+
+    /**
+     * Switches to the main window from an iframe
+     *
+     * @Given /^I switch to main window from iframe$/
+     */
+    public function iSwitchToMainWindowFromIframe(): void
+    {
+
+        $this->getSession()->switchToIFrame();
+    }
+
+    /**
+     * Restart the current browser window
+     *
+     * @Then /^I restart the browser$/
+     */
+    public function iRestartTheBrowser(): void
+    {
+
+        $this->getSession()->restart();
+    }
+
+    /**
+     * @Then /^I refresh the browser$/
+     */
+    public function iRefreshTheBrowser(): void
+    {
+
+        $this->getSession()->reload();
+    }
+
+    /**
+     * Check page contains element specified by CSS selector
+     * Example: Then I should see element "username"
+     * Example: And should see element "password"
+     *
+     * @Then /^(?:|I )should see element "(?P<locator>(?:[^"]|\\")*)"$/
+     * @param string $selector
+     */
+    public function iShouldSeeElementByCss($selector): void
+    {
+
+        $this->assertSession()->elementExists('css', $selector);
+    }
+
+    /**
+     * Check page dooesn't contain element specified by CSS selector
+     * Example: Then I should not see element "username"
+     * Example: And should not see "password" element
+     *
+     * @Then /^(?:|I )should not see element "(?P<locator>(?:[^"]|\\")*)"$/
+     * @param string $selector
+     */
+    public function iShouldNotSeeElementByCss($selector): void
+    {
+
+        $this->assertSession()->elementNotExists('css', $selector);
+    }
+
+    /**
+     * @Then I should see :url page url
+     ** @param string $url
+     ** @throws \Exception
+     */
+    public function thenIShouldSeePage(string $url): void
+    {
+        $windowNames = $this->getSession()->getWindowNames();
+        if (count($windowNames) > 1) {
+            $this->switchToNewTab($windowNames);
+        }
 
         $current_url = $this->getSession()->getCurrentUrl();
         if (!strpos($current_url, $url)) {
@@ -389,16 +404,17 @@ class CommonContext extends RawContext {
         $this->getSession()->switchToWindow();
     }
 
-  /**
-   * Mouse hover with specified CSS locator
-   * @When /^I hover over the element "([^"]*)"$/
-   ** @param string $locator
-   ** @throws \Exception
-   */
-  public function iHoverOverTheElement($locator){
+    /**
+     * Mouse hover with specified CSS locator
+     * @When /^I hover over the element "([^"]*)"$/
+     ** @param string $locator
+     ** @throws \Exception
+     */
+    public function iHoverOverTheElement($locator)
+    {
 
-    $session = $this->getSession(); // get the mink session
-    $element = $session->getPage()->find('css', $locator); // runs the actual query and returns the element
+        $session = $this->getSession(); // get the mink session
+        $element = $session->getPage()->find('css', $locator); // runs the actual query and returns the element
 
         if (NULL === $element) {
             throw new \InvalidArgumentException(sprintf('Could not evaluate CSS selector: "%s"', $locator));
@@ -406,81 +422,85 @@ class CommonContext extends RawContext {
         $element->mouseOver();
     }
 
-  /**
-   * @When /^(?:|I )should see "([^"]*)" in alert/
-   * @param string $message The message.
-   *
-   * @throws \Exception
-   */
-  public function assertAlertMessage($message) {
-    $alertText = $this->getSession()
-      ->getDriver()
-      ->getWebDriverSession()
-      ->getAlert_text();
-    if ($alertText !== $message) {
-      throw new \Exception("Modal dialog present: $alertText, when expected was $message");
-    }
-  }
-
-  /**
-   * Verify page has following links
-   *
-   * @Then I should see below links:
-   *
-   * @param TableNode $links
-   *
-   * @throws \Exception
-   */
-  public function assertPageContainsLinks(TableNode $links) {
-    $actualLinks = $this->getSession()
-      ->getPage()
-      ->find('css', 'main')
-      ->findAll('css', 'a');
-    foreach ($links as $link) {
-      $flag = FALSE;
-      foreach ($actualLinks as $actualLink) {
-        $actualLinkText = $actualLink->getText();
-        if ((trim($actualLinkText) == $link['links'])) {
-          $flag = TRUE;
+    /**
+     * @When /^(?:|I )should see "([^"]*)" in alert/
+     * @param string $message The message.
+     *
+     * @throws \Exception
+     */
+    public function assertAlertMessage($message)
+    {
+        $alertText = $this->getSession()
+            ->getDriver()
+            ->getWebDriverSession()
+            ->getAlert_text();
+        if ($alertText !== $message) {
+            throw new \Exception("Modal dialog present: $alertText, when expected was $message");
         }
-      }
-      if (!$flag) {
-        throw new \Exception('"' . $link['links'] . '" link can not be found.' . "\n\n");
-      }
     }
 
-  }
+    /**
+     * Verify page has following links
+     *
+     * @Then I should see below links:
+     *
+     * @param TableNode $links
+     *
+     * @throws \Exception
+     */
+    public function assertPageContainsLinks(TableNode $links)
+    {
+        $actualLinks = $this->getSession()
+            ->getPage()
+            ->find('css', 'main')
+            ->findAll('css', 'a');
+        foreach ($links as $link) {
+            $flag = FALSE;
+            foreach ($actualLinks as $actualLink) {
+                $actualLinkText = $actualLink->getText();
+                if ((trim($actualLinkText) == $link['links'])) {
+                    $flag = TRUE;
+                }
+            }
+            if (!$flag) {
+                throw new \Exception('"' . $link['links'] . '" link can not be found.' . "\n\n");
+            }
+        }
 
-  /**
-   * Verify page has given link
-   *
-   * @Then I should see the link :link
-   *
-   * @param string $link
-   *
-   * @throws \Exception
-   */
-  public function assertLinkVisible($link) {
-    $element = $this->getSession()->getPage();
-    $result = $element->findLink($link);
-    if ($result && !$result->isVisible()) {
-      throw new \Exception(sprintf("No link to '%s' on the page %s", $link, $this->getSession()
-        ->getCurrentUrl()));
     }
-    if (empty($result)) {
 
-      throw new \Exception(sprintf("No link to '%s' on the page %s", $link, $this->getSession()
-        ->getCurrentUrl()));
+    /**
+     * Verify page has given link
+     *
+     * @Then I should see the link :link
+     *
+     * @param string $link
+     *
+     * @throws \Exception
+     */
+    public function assertLinkVisible($link)
+    {
+        $element = $this->getSession()->getPage();
+        $result = $element->findLink($link);
+        if ($result && !$result->isVisible()) {
+            throw new \Exception(sprintf("No link to '%s' on the page %s", $link, $this->getSession()
+                ->getCurrentUrl()));
+        }
+        if (empty($result)) {
+
+            throw new \Exception(sprintf("No link to '%s' on the page %s", $link, $this->getSession()
+                ->getCurrentUrl()));
+        }
+
     }
 
-  }
-
-  /**
-   * Fills in form field with specified css locator
-   *
-   * @When I fill in css :locator with :value
-   */
-  public function fillField($locator, $value) {
-    $this->getSession()->getPage()->find('css', $locator)->setValue($value);
-  }
+    /**
+     * Fills in form field with specified css locator
+     *
+     * @When I fill in css :locator with :value
+     */
+    public function fillField($locator, $value)
+    {
+        $this->getSession()->getPage()->find('css', $locator)->setValue($value);
+    }
 }
