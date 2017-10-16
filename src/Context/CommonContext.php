@@ -124,8 +124,8 @@ class CommonContext extends RawContext
 
     /**
      * Click on the element with given CSS
-     ** @When I click on :arg element
-     ** @param string $field
+     * @When I click on :arg element
+     * @param string $field
      * @throws \Exception
      */
     public function iClickOnElement(string $field): void
@@ -135,8 +135,8 @@ class CommonContext extends RawContext
 
     /**
      * Double click on the element with given CSS
-     ** @When I double click on :arg element
-     ** @param string $field
+     * @When I double click on :arg element
+     * @param string $field
      * @throws \Exception
      */
     public function iDoubleClickOnElement(string $field): void
@@ -149,7 +149,7 @@ class CommonContext extends RawContext
      * Example: When I fill test data "John" in "firstname" field
      *
      * @When I fill test data :arg1 in :arg2 field
-     ** @param string $value
+     * @param string $value
      * @param string $locator
      */
     public function iFillTestDataInField(string $value, string $locator): void
@@ -181,7 +181,7 @@ class CommonContext extends RawContext
 
     /**
      * @When I fill test data :arg1 in :arg2 confirm field
-     ** @param string $value
+     * @param string $value
      * @param string $locator
      */
     public function iFillConfirmTestDataInField(string $value, string $locator): void
@@ -195,7 +195,7 @@ class CommonContext extends RawContext
      * Reads the value of a field and adds to test data array
      *
      * @When I read :arg1 from :arg2 field
-     ** @param string $value
+     * @param string $value
      * @param string $locator
      */
     public function iReadValueFromField(string $value, string $locator): void
@@ -210,7 +210,7 @@ class CommonContext extends RawContext
      * Example: And I should see below elements:
      *
      * @Then I should see below elements:
-     ** @param TableNode $locators
+     * @param TableNode $locators
      */
     public function assertPageContainsElements(TableNode $locators): void
     {
@@ -234,7 +234,7 @@ class CommonContext extends RawContext
      * Example: And I should not see below elements:
      *
      * @Then I should not see below elements:
-     ** @param TableNode $locators
+     * @param TableNode $locators
      */
     public function assertPageNotContainsElements(TableNode $locators): void
     {
@@ -258,7 +258,7 @@ class CommonContext extends RawContext
      * Example: And I should see below text:
      *
      * @Then I should see below text:
-     ** @param TableNode $texts
+     * @param TableNode $texts
      */
     public function assertPageContainsTexts(TableNode $texts)
     {
@@ -274,7 +274,7 @@ class CommonContext extends RawContext
      * Example: And I should not see below text:
      *
      * @Then I should not see below text:
-     ** @param TableNode $texts
+     * @param TableNode $texts
      */
     public function assertPageDonotContainTexts(TableNode $texts)
     {
@@ -288,7 +288,7 @@ class CommonContext extends RawContext
      * Checks, that an element with given css contains specific text
      *
      * @Then I should see :arg1 test data in :arg2 element
-     ** @param string $value
+     * @param string $value
      * @param string $selector
      */
     public function iShouldSeeTestDataInElement(string $value, string $selector): void
@@ -317,7 +317,7 @@ class CommonContext extends RawContext
 
     /**
      * Switch to a given iFrame with css locator
-     ** @Then switch to iframe with css :locator
+     * @Then switch to iframe with css :locator
      */
     public function switchToIframeCSS($locator)
     {
@@ -385,8 +385,8 @@ class CommonContext extends RawContext
 
     /**
      * @Then I should see :url page url
-     ** @param string $url
-     ** @throws \Exception
+     * @param string $url
+     * @throws \Exception
      */
     public function thenIShouldSeePage(string $url): void
     {
@@ -407,8 +407,8 @@ class CommonContext extends RawContext
     /**
      * Mouse hover with specified CSS locator
      * @When /^I hover over the element "([^"]*)"$/
-     ** @param string $locator
-     ** @throws \Exception
+     * @param string $locator
+     * @throws \Exception
      */
     public function iHoverOverTheElement($locator)
     {
