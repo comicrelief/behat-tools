@@ -267,8 +267,11 @@ class RestContext implements Context
         $responseData = $this->_response->getBody();
         $responseData = \GuzzleHttp\json_decode($responseData, true);
 
-        TestCase::assertEquals($expectedValue, $responseData[$property],
-            'Failed: The response does not contain expected value ' . $property);
+        TestCase::assertEquals(
+            $expectedValue,
+            $responseData[$property],
+            'Failed: The response does not contain expected value ' . $property
+        );
     }
 
     public function getParameter($name)
@@ -311,7 +314,10 @@ class RestContext implements Context
         $this->_response->getBody()->rewind();
         $result = $this->_response->getBody()->getContents();
 
-        TestCase::assertContains($text, $result,
-            'Failed: The response does not contain expected value ' . $text);
+        TestCase::assertContains(
+            $text,
+            $result,
+            'Failed: The response does not contain expected value ' . $text
+        );
     }
 }

@@ -32,12 +32,15 @@
   },
 
   "scripts": {
-    "test": "./vendor/bin/phpunit --config=phpunit.xml",
+    "test": [
+      "./vendor/bin/phpunit --config=phpunit.xml",
+      "@style:check"
+    ],
     "style:check": [
-      "vendor/bin/phpcs --standard=PSR2 --encoding=utf-8 --colors -n tests Utils"
+      "vendor/bin/phpcs --standard=PSR2 --encoding=utf-8 --colors -n src test"
     ],
     "style:fix": [
-      "vendor/bin/phpcbf --standard=PSR2 --encoding=utf-8 -n tests Utils"
+      "vendor/bin/phpcbf --standard=PSR2 --encoding=utf-8 -n src test"
     ]
   },
 
