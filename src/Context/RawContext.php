@@ -29,7 +29,7 @@ class RawContext extends RawMinkContext {
    *
    * @param string $locator
    *
-   * @return \Behat\Mink\Element\NodeElement|mixed|null
+   * @return \Behat\Mink\Element\NodeElement|mixed
    * @throws \Exception
    */
   public function findElementByCss(string $locator) {

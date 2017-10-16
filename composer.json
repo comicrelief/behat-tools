@@ -26,11 +26,13 @@
 
   "autoload": {
      "psr-4": {
-        "Comicrelief\\Behat\\": "src"
+        "Comicrelief\\Behat\\": "src",
+        "Comicrelief\\Behat\\Unit\\": "test"
      }
   },
 
   "scripts": {
+    "test": "./vendor/bin/phpunit --config=phpunit.xml",
     "style:check": [
       "vendor/bin/phpcs --standard=PSR2 --encoding=utf-8 --colors -n tests Utils"
     ],

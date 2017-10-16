@@ -1,0 +1,16 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: comicrelief/frost-user, tag: "latest"}
+
+inputs:
+- name: behat-tools
+
+run:
+  path: sh
+  args:
+   - -c
+   - |
+     ./behat-tools/ci/phpunit.sh
