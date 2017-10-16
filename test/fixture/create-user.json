@@ -1,0 +1,14 @@
+{
+  "contentType": "test-content",
+  "payload": [
+    {
+      "firstname": "Test User"
+    }
+  ],
+  "metadata": {
+    "method": "post",
+    "abc": {
+      "bcd": 3
+    }
+  }
+}

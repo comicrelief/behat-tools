@@ -42,6 +42,38 @@ class RestContext implements Context
     }
 
     /**
+     * @return Client
+     */
+    public function getClient(): Client
+    {
+        return $this->_client;
+    }
+
+    /**
+     * @param Client $client
+     */
+    public function setClient(Client $client)
+    {
+        $this->_client = $client;
+    }
+
+    /**
+     * @param array $requestPayload
+     */
+    public function setRequestPayload(array $requestPayload)
+    {
+        $this->requestPayload = $requestPayload;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     */
+    public function setResponse(ResponseInterface $response)
+    {
+        $this->_response = $response;
+    }
+
+    /**
      * @Given /^that I want to make a new "([^"]*)" request$/
      * @param string $requestMethod
      */
@@ -95,6 +127,7 @@ class RestContext implements Context
      * @When I send a :method request to :url with :query
      * @param string $requestMethod
      * @param string $pageUrl
+     * @param string $query
      */
     public function iSendRequestWithQuery(
         string $requestMethod,
@@ -109,13 +142,20 @@ class RestContext implements Context
      * @Then /^the response should be in JSON format$/
      * @throws \RuntimeException
      */
-    public function theResponseIsJson(): void
+    public function theResponseIsJson(): bool
     {
-        $this->responseBody = \GuzzleHttp\json_decode($this->_response->getBody());
+        try {
+            $this->responseBody = \GuzzleHttp\json_decode($this->_response->getBody());
+        } catch (\InvalidArgumentException $e) {
+            throw new \RuntimeException('Response body was empty or not a valid json');
+        }
+
 
         if (empty($this->responseBody)) {
-            throw new \RuntimeException('Response was not JSON');
+            throw new \RuntimeException('Response json was empty');
         }
+
+        return true;
     }
 
     /**
@@ -124,7 +164,7 @@ class RestContext implements Context
      */
     public function iHaveThePayload(TableNode $requestPayload): void
     {
-        $this->requestPayload = $requestPayload->getRowsHash();
+        $this->setRequestPayload($requestPayload->getRowsHash());
     }
 
     /**
