@@ -7,7 +7,6 @@ use Faker;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-
 class CommonContext extends RawContext
 {
 
@@ -83,7 +82,7 @@ class CommonContext extends RawContext
                 $context->assertSession()->elementNotExists('css', $locator);
                 return true;
             } catch (RuntimeException $e) {
-                throw New \RuntimeException('The element with css ' . $locator . ' do not disappear from the page ' . $e);
+                throw new \RuntimeException('The element with css ' . $locator . ' do not disappear from the page ' . $e);
             }
         });
     }
@@ -156,19 +155,19 @@ class CommonContext extends RawContext
     {
 
         $faker = Faker\Factory::create('en_GB');
-        $word = NULL;
+        $word = null;
 
-        if (strpos(strtolower($value), 'email') !== FALSE) {
+        if (strpos(strtolower($value), 'email') !== false) {
             $word = 'qa-tester_' . rand(1, 1000000) . '@comicrelieftest.com';
-        } elseif (strpos(strtolower($value), 'postcode') !== FALSE) {
+        } elseif (strpos(strtolower($value), 'postcode') !== false) {
             $word = $faker->postcode;
-        } elseif (strpos(strtolower($value), 'text') !== FALSE) {
+        } elseif (strpos(strtolower($value), 'text') !== false) {
             $word = $faker->text;
-        } elseif (strpos(strtolower($value), 'url') !== FALSE) {
+        } elseif (strpos(strtolower($value), 'url') !== false) {
             $word = $faker->url;
-        } elseif (strpos(strtolower($value), 'id') !== FALSE) {
+        } elseif (strpos(strtolower($value), 'id') !== false) {
             $word = $faker->uuid;
-        } elseif (strpos(strtolower($value), 'phone') !== FALSE) {
+        } elseif (strpos(strtolower($value), 'phone') !== false) {
             $word = $faker->phoneNumber;
         } else {
             $word = $faker->bothify('?????####');
@@ -215,14 +214,14 @@ class CommonContext extends RawContext
     public function assertPageContainsElements(TableNode $locators): void
     {
 
-        $elementPresent = NULL;
+        $elementPresent = null;
 
         foreach ($locators as $locator) {
             try {
                 $this->assertSession()->elementExists('css', $locator['locator']);
-                $elementPresent = TRUE;
+                $elementPresent = true;
             } catch (\Behat\Mink\Exception\Exception $e) {
-                $elementPresent = FALSE;
+                $elementPresent = false;
             }
             TestCase::assertTrue($elementPresent, 'The element with css ' . $locator['locator'] . 'is not visible in the page');
         }
@@ -239,14 +238,14 @@ class CommonContext extends RawContext
     public function assertPageNotContainsElements(TableNode $locators): void
     {
 
-        $elementPresent = NULL;
+        $elementPresent = null;
 
         foreach ($locators as $locator) {
             try {
                 $this->assertSession()->elementNotExists('css', $locator['locator']);
-                $elementPresent = TRUE;
+                $elementPresent = true;
             } catch (\Behat\Mink\Exception\Exception $e) {
-                $elementPresent = FALSE;
+                $elementPresent = false;
             }
             TestCase::assertTrue($elementPresent, 'The element with css ' . $locator['locator'] . 'is visible in the page');
         }
@@ -297,8 +296,11 @@ class CommonContext extends RawContext
         $elementHtml = $this->findElementByCss($selector)->getHtml();
         $text = $this->testDataHandler->getTestData($value);
         if ($text !== '') {
-            TestCase::assertContains($text, $elementHtml,
-                'The text ' . $text . ' was not found in the html of the element matching css ' . $selector);
+            TestCase::assertContains(
+                $text,
+                $elementHtml,
+                'The text ' . $text . ' was not found in the html of the element matching css ' . $selector
+            );
         } else {
             echo 'The field ' . $value . 'is empty';
         }
@@ -310,7 +312,7 @@ class CommonContext extends RawContext
      * @Given /^I switch to the iframe "([^"]*)"$/
      * @param string $arg1
      */
-    public function iSwitchToIframe(string $arg1 = NULL): void
+    public function iSwitchToIframe(string $arg1 = null): void
     {
         $this->getSession()->switchToIFrame($arg1);
     }
@@ -416,7 +418,7 @@ class CommonContext extends RawContext
         $session = $this->getSession(); // get the mink session
         $element = $session->getPage()->find('css', $locator); // runs the actual query and returns the element
 
-        if (NULL === $element) {
+        if (null === $element) {
             throw new \InvalidArgumentException(sprintf('Could not evaluate CSS selector: "%s"', $locator));
         }
         $element->mouseOver();
@@ -455,18 +457,17 @@ class CommonContext extends RawContext
             ->find('css', 'main')
             ->findAll('css', 'a');
         foreach ($links as $link) {
-            $flag = FALSE;
+            $flag = false;
             foreach ($actualLinks as $actualLink) {
                 $actualLinkText = $actualLink->getText();
                 if ((trim($actualLinkText) == $link['links'])) {
-                    $flag = TRUE;
+                    $flag = true;
                 }
             }
             if (!$flag) {
                 throw new \Exception('"' . $link['links'] . '" link can not be found.' . "\n\n");
             }
         }
-
     }
 
     /**
@@ -487,11 +488,9 @@ class CommonContext extends RawContext
                 ->getCurrentUrl()));
         }
         if (empty($result)) {
-
             throw new \Exception(sprintf("No link to '%s' on the page %s", $link, $this->getSession()
                 ->getCurrentUrl()));
         }
-
     }
 
     /**

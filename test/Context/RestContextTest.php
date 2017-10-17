@@ -189,6 +189,4 @@ class RestContextTest extends TestCase
         $fixture = file_get_contents($filename);
         return $fixture;
     }
-
-
 }
