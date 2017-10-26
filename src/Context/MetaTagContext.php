@@ -71,7 +71,7 @@ class MetaTagContext extends RawContext
 
         $ogImageNode = $this->getSession()->getPage()->find('css', "meta[property='og:image']");
         if (!$ogImageNode) {
-          throw new \UnexpectedValueException("Can not find property og:image on $currentPage");
+            throw new \UnexpectedValueException("Can not find property og:image on $currentPage");
         }
     }
 }
