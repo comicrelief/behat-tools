@@ -19,12 +19,12 @@ class MetaTagContext extends RawContext
     {
         $ogNode = $this->getSession()->getPage()->find('css', $locator);
         if (!$ogNode) {
-            throw new \Exception("Can not find css locator: $locator");
+            throw new \UnexpectedValueException("Can not find css locator: $locator");
         }
 
         $ogContent = $ogNode->getAttribute('content');
         if (trim($ogContent) != trim($expectContent)) {
-            throw new \Exception("Can not find og meta content: $expectContent");
+            throw new \UnexpectedValueException("Can not find og meta content: $expectContent");
         }
     }
 
@@ -36,42 +36,42 @@ class MetaTagContext extends RawContext
     public function checkForOgMetaTags()
     {
 
-        $curUrl = $this->getSession()->getCurrentUrl();
+        $currentPage = $this->getSession()->getCurrentUrl();
         $statusCode = $this->getSession()->getStatusCode();
         if ($statusCode !== 200) {
-            throw new \Exception("HTTP ERROR $statusCode : $curUrl");
+            throw new \UnexpectedValueException("HTTP ERROR $statusCode : $currentPage");
         }
 
         $ogTitleNode = $this->getSession()->getPage()->find('css', "meta[property='og:title']");
         if (!$ogTitleNode) {
-            throw new \Exception("Can not find property og:title on $curUrl");
+            throw new \UnexpectedValueException("Can not find property og:title on $currentPage");
         }
 
         $ogURLNode = $this->getSession()->getPage()->find('css', "meta[property='og:url']");
         if (!$ogURLNode) {
-            throw new \Exception("Can not find property og:url on $curUrl");
+            throw new \UnexpectedValueException("Can not find property og:url on $currentPage");
         }
 
         $ogDescriptionNode = $this->getSession()
         ->getPage()
         ->find('css', "meta[property='og:description']");
         if (!$ogDescriptionNode) {
-            throw new \Exception("Can not find property og:description on $curUrl");
+            throw new \UnexpectedValueException("Can not find property og:description on $currentPage");
         }
 
         $ogTypeNode = $this->getSession()->getPage()->find('css', "meta[property='og:type']");
         if (!$ogTypeNode) {
-            throw new \Exception("Can not find property og:type on $curUrl");
+            throw new \UnexpectedValueException("Can not find property og:type on $currentPage");
         }
 
         $ogSiteNameNode = $this->getSession()->getPage()->find('css', "meta[property='og:site_name']");
         if (!$ogSiteNameNode) {
-            throw new \Exception("Can not find property og:site_name on $curUrl");
+            throw new \UnexpectedValueException("Can not find property og:site_name on $currentPage");
         }
 
         $ogImageNode = $this->getSession()->getPage()->find('css', "meta[property='og:image']");
         if (!$ogImageNode) {
-          throw new \Exception("Can not find property og:image on $curUrl");
+          throw new \UnexpectedValueException("Can not find property og:image on $currentPage");
         }
     }
 }
