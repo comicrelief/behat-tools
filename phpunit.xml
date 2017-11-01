@@ -1,6 +1,6 @@
 <phpunit bootstrap="vendor/autoload.php" colors="true" verbose="false" debug="true">
 
-    <testsuite name="behat-tools">
+    <testsuite name="behattools">
         <directory>./test</directory>
     </testsuite>
 

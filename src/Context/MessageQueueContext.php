@@ -8,25 +8,22 @@ use PHPUnit\Framework\TestCase;
 class MessageQueueContext extends RawContext
 {
 
-    private $messageQueueUrl = null;
+    private $messageQueueUrl;
 
-    private $jsonMQString = null;
+    private $jsonMQString;
 
-    private $messageQueuePresent = null;
-
-    protected $testDataHandler;
+    private $messageQueuePresent;
 
   /**
    * Webconnector constructor.
    * Create instance for TestDataHandler class
    *
    * @param string $parameters
-   *
    */
     public function __construct($parameters)
     {
+        parent::__construct();
         $this->messageQueueUrl = $parameters;
-        $this->testDataHandler = new TestDataHandler();
     }
 
   /**

@@ -16,7 +16,7 @@ class GoutteContext extends RawContext
         $urls[] = null;
 
         if ($statusCode !== 200) {
-            throw new \Exception("HTTP ERROR $statusCode : $curUrl");
+            throw new \RuntimeException("HTTP ERROR $statusCode : $curUrl");
         }
 
         $elementA = $this->getSession()
@@ -36,7 +36,7 @@ class GoutteContext extends RawContext
                     $this->visitPath($url);
                     $statusCode = $this->getSession()->getStatusCode();
                     if ($statusCode !== 200) {
-                        throw new \Exception("'$url' link not found ( HTTP ERROR : $statusCode ) in Page '$curUrl' ");
+                        throw new \RuntimeException("'$url' link not found ( HTTP ERROR : $statusCode ) in Page '$curUrl' ");
                     }
                 }
             }

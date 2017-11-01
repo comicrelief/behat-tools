@@ -111,7 +111,7 @@ class RestContextTest extends TestCase
         $response->getBody()->willReturn('{}');
 
         $client = $this->prophesize(Client::class);
-        $client->post($baseUrl .'/user', ["json" => $this->postData, "verify" => false])
+        $client->post($baseUrl .'/user', ['json' => $this->postData, 'verify' => false])
             ->willReturn($response->reveal());
 
         $class->setClient($client->reveal());
@@ -135,7 +135,7 @@ class RestContextTest extends TestCase
         $requestException->getResponse()->willReturn($response->reveal());
 
         $client = $this->prophesize(Client::class);
-        $client->post($baseUrl .'/user', ["json" => $this->postData, "verify" => false])
+        $client->post($baseUrl .'/user', ['json' => $this->postData, 'verify' => false])
             ->willThrow($requestException->reveal());
 
         $class->setClient($client->reveal());
@@ -186,7 +186,6 @@ class RestContextTest extends TestCase
     protected function getFixture(string $name): string
     {
         $filename = dirname(__DIR__) . '/fixture/'. $name;
-        $fixture = file_get_contents($filename);
-        return $fixture;
+        return file_get_contents($filename);
     }
 }
