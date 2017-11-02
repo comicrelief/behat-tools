@@ -11,7 +11,6 @@ class TestDataHandler
     /* @var array */
     protected static $testData = [];
 
-
     /**
      * Add test data into testData array
      * @param string $key
@@ -44,9 +43,10 @@ class TestDataHandler
 
     /**
      * Set test data from testData array
-     * @param mixed $value
+     * Deletes existing test data and replaces with given array
+     * @param array $value
      */
-    public static function setTestData($value): void
+    public static function setTestData(array $value): void
     {
         self::$testData = $value;
     }
