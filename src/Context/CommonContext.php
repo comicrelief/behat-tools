@@ -176,8 +176,10 @@ class CommonContext extends RawContext
         $word = null;
 
         if (stripos($value, 'email') !== false) {
-            $word = 'qa-tester_' . random_int(1,
-                1000000) . '@comicrelieftest.com';
+            $word = 'qa-tester_' . random_int(
+                1,
+                1000000
+            ) . '@comicrelieftest.com';
         } elseif (stripos($value, 'postcode') !== false) {
             $word = $faker->postcode;
         } elseif (stripos($value, 'text') !== false) {
@@ -204,13 +206,15 @@ class CommonContext extends RawContext
      * @param string $locator
      */
     public function iFillConfirmTestDataInField(
-      string $value,
-      string $locator
+        string $value,
+        string $locator
     ): void {
         $this->findElementByCss($locator)
           ->setValue($this->testDataHandler->getTestData($value));
-        $this->testDataHandler->addTestData('confirm' . $value,
-          $this->testDataHandler->getTestData($value));
+        $this->testDataHandler->addTestData(
+            'confirm' . $value,
+            $this->testDataHandler->getTestData($value)
+        );
     }
 
     /**
@@ -249,8 +253,10 @@ class CommonContext extends RawContext
             } catch (\Behat\Mink\Exception\Exception $e) {
                 $elementPresent = false;
             }
-            TestCase::assertTrue($elementPresent,
-              'The element with css ' . $locator['locator'] . 'is not visible in the page');
+            TestCase::assertTrue(
+                $elementPresent,
+                'The element with css ' . $locator['locator'] . 'is not visible in the page'
+            );
         }
     }
 
@@ -276,8 +282,10 @@ class CommonContext extends RawContext
             } catch (\Behat\Mink\Exception\Exception $e) {
                 $elementPresent = false;
             }
-            TestCase::assertTrue($elementPresent,
-              'The element with css ' . $locator['locator'] . 'is visible in the page');
+            TestCase::assertTrue(
+                $elementPresent,
+                'The element with css ' . $locator['locator'] . 'is visible in the page'
+            );
         }
     }
 
@@ -324,17 +332,17 @@ class CommonContext extends RawContext
      * @param string $selector
      */
     public function iShouldSeeTestDataInElement(
-      string $value,
-      string $selector
+        string $value,
+        string $selector
     ): void {
 
         $elementHtml = $this->findElementByCss($selector)->getHtml();
         $text = $this->testDataHandler->getTestData($value);
         if ($text !== '') {
             TestCase::assertContains(
-              $text,
-              $elementHtml,
-              'The text ' . $text . ' was not found in the html of the element matching css ' . $selector
+                $text,
+                $elementHtml,
+                'The text ' . $text . ' was not found in the html of the element matching css ' . $selector
             );
         } else {
             echo 'The field ' . $value . 'is empty';
@@ -455,15 +463,18 @@ class CommonContext extends RawContext
      */
     public function iHoverOverTheElement($locator)
     {
-
         $session = $this->getSession(); // get the mink session
         $element = $session->getPage()
-          ->find('css',
-            $locator); // runs the actual query and returns the element
+          ->find(
+              'css',
+              $locator
+          ); // runs the actual query and returns the element
 
         if (null === $element) {
-            throw new \InvalidArgumentException(sprintf('Could not evaluate CSS selector: "%s"',
-              $locator));
+            throw new \InvalidArgumentException(sprintf(
+                'Could not evaluate CSS selector: "%s"',
+                $locator
+            ));
         }
         $element->mouseOver();
     }
@@ -528,14 +539,20 @@ class CommonContext extends RawContext
         $element = $this->getSession()->getPage();
         $result = $element->findLink($link);
         if ($result && !$result->isVisible()) {
-            throw new \RuntimeException(sprintf("No link to '%s' on the page %s",
-              $link, $this->getSession()
-                ->getCurrentUrl()));
+            throw new \RuntimeException(sprintf(
+                "No link to '%s' on the page %s",
+                $link,
+                $this->getSession()
+                ->getCurrentUrl()
+            ));
         }
         if (empty($result)) {
-            throw new \RuntimeException(sprintf("No link to '%s' on the page %s",
-              $link, $this->getSession()
-                ->getCurrentUrl()));
+            throw new \RuntimeException(sprintf(
+                "No link to '%s' on the page %s",
+                $link,
+                $this->getSession()
+                ->getCurrentUrl()
+            ));
         }
     }
 
