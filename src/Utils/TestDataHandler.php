@@ -23,11 +23,16 @@ class TestDataHandler
 
     /**
      * Get test data from testData array
-     * @param mixed $key
+     * @param string $key
      * @return mixed
+     * @throws \RuntimeException
      */
     public function getTestData(string $key): string
     {
+        if (!$this->hasTestData($key)) {
+            throw new \RuntimeException("Test data value was not added for '$key' key");
+        }
+
         return self::$testData[$key];
     }
 
