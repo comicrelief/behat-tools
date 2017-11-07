@@ -57,4 +57,18 @@ class TestDataHandlerTest extends TestCase
 
         $this->assertFalse($this->testDataHandler->hasTestData('foo'));
     }
+
+    /**
+     * Trying to fetch a test data which was not set first, should throw exception
+     */
+    public function testGetTestDataWithoutSettingFirst()
+    {
+        // reset test data first
+        $this->testDataHandler::setTestData([]);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage("Test data value was not added for 'foo' key");
+
+        $this->testDataHandler->getTestData('foo');
+    }
 }
