@@ -406,18 +406,19 @@ class CommonContext extends RawContext
      */
     public function thenIShouldSeePage(string $url): void
     {
+        $current_url = $this->getSession()->getCurrentUrl();
         $windowNames = $this->getSession()->getWindowNames();
         if (count($windowNames) > 1) {
             $this->switchToNewTab($windowNames);
+            $current_url = $this->getSession()->getCurrentUrl();
+            $this->getSession()->executeScript('window.close()');
+            //switch back to main window
+            $this->getSession()->switchToWindow();
         }
 
-        $current_url = $this->getSession()->getCurrentUrl();
         if (!strpos($current_url, $url)) {
-            throw new \RuntimeException("Can not find url $url");
+            throw new \Exception("Can not find url $url");
         }
-
-        //switch back to main window
-        $this->getSession()->switchToWindow();
     }
 
     /**
