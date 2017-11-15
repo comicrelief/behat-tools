@@ -50,12 +50,17 @@ class CommonContext extends RawContext
     public function cancelPopup()
     {
 
-        $this->getSession()->getDriver()->getWebDriverSession()->dismiss_alert();
+        $this->getSession()
+          ->getDriver()
+          ->getWebDriverSession()
+          ->dismiss_alert();
     }
 
     /**
      * @Then I wait for :arg element to appear
+     *
      * @param string $locator
+     *
      * @throws \Exception
      */
     public function iWaitForElementToAppear(string $locator)
@@ -72,7 +77,9 @@ class CommonContext extends RawContext
 
     /**
      * @Then I wait for :arg element to disappear
+     *
      * @param string $locator
+     *
      * @throws \Exception
      */
     public function iWaitForElementToDisappear(string $locator)
@@ -89,7 +96,9 @@ class CommonContext extends RawContext
 
     /**
      * @Then I wait for :arg text to appear
+     *
      * @param string $text
+     *
      * @throws \Exception
      */
     public function iWaitForTextToAppear(string $text)
@@ -106,7 +115,9 @@ class CommonContext extends RawContext
 
     /**
      * @Then I wait for :arg text to disappear
+     *
      * @param string $text
+     *
      * @throws \Exception
      */
     public function iWaitForTextToDisappear(string $text)
@@ -123,8 +134,11 @@ class CommonContext extends RawContext
 
     /**
      * Click on the element with given CSS
+     *
      * @When I click on :arg element
+     *
      * @param string $field
+     *
      * @throws \Exception
      */
     public function iClickOnElement(string $field): void
@@ -134,8 +148,11 @@ class CommonContext extends RawContext
 
     /**
      * Double click on the element with given CSS
+     *
      * @When I double click on :arg element
+     *
      * @param string $field
+     *
      * @throws \Exception
      */
     public function iDoubleClickOnElement(string $field): void
@@ -148,6 +165,7 @@ class CommonContext extends RawContext
      * Example: When I fill test data "John" in "firstname" field
      *
      * @When I fill test data :arg1 in :arg2 field
+     *
      * @param string $value
      * @param string $locator
      */
@@ -157,7 +175,10 @@ class CommonContext extends RawContext
         $word = null;
 
         if (stripos($value, 'email') !== false) {
-            $word = 'qa-tester_' . random_int(1, 1000000) . '@comicrelieftest.com';
+            $word = 'qa-tester_' . random_int(
+                1,
+                1000000
+            ) . '@comicrelieftest.com';
         } elseif (stripos($value, 'postcode') !== false) {
             $word = $faker->postcode;
         } elseif (stripos($value, 'text') !== false) {
@@ -174,7 +195,7 @@ class CommonContext extends RawContext
 
         $this->testDataHandler->addTestData($value, $word);
         $this->findElementByCss($locator)
-            ->setValue($this->testDataHandler->getTestData($value));
+          ->setValue($this->testDataHandler->getTestData($value));
     }
 
     /**
@@ -195,19 +216,27 @@ class CommonContext extends RawContext
 
     /**
      * @When I fill test data :arg1 in :arg2 confirm field
+     *
      * @param string $value
      * @param string $locator
      */
-    public function iFillConfirmTestDataInField(string $value, string $locator): void
-    {
-        $this->findElementByCss($locator)->setValue($this->testDataHandler->getTestData($value));
-        $this->testDataHandler->addTestData('confirm' . $value, $this->testDataHandler->getTestData($value));
+    public function iFillConfirmTestDataInField(
+        string $value,
+        string $locator
+    ): void {
+        $this->findElementByCss($locator)
+          ->setValue($this->testDataHandler->getTestData($value));
+        $this->testDataHandler->addTestData(
+            'confirm' . $value,
+            $this->testDataHandler->getTestData($value)
+        );
     }
 
     /**
      * Reads the value of a field and adds to test data array
      *
      * @When I read :arg1 from :arg2 field
+     *
      * @param string $value
      * @param string $locator
      */
@@ -223,6 +252,7 @@ class CommonContext extends RawContext
      * Example: And I should see below elements:
      *
      * @Then I should see below elements:
+     *
      * @param TableNode $locators
      */
     public function assertPageContainsElements(TableNode $locators): void
@@ -232,12 +262,16 @@ class CommonContext extends RawContext
 
         foreach ($locators as $locator) {
             try {
-                $this->assertSession()->elementExists('css', $locator['locator']);
+                $this->assertSession()
+                  ->elementExists('css', $locator['locator']);
                 $elementPresent = true;
             } catch (\Behat\Mink\Exception\Exception $e) {
                 $elementPresent = false;
             }
-            TestCase::assertTrue($elementPresent, 'The element with css ' . $locator['locator'] . 'is not visible in the page');
+            TestCase::assertTrue(
+                $elementPresent,
+                'The element with css ' . $locator['locator'] . 'is not visible in the page'
+            );
         }
     }
 
@@ -247,6 +281,7 @@ class CommonContext extends RawContext
      * Example: And I should not see below elements:
      *
      * @Then I should not see below elements:
+     *
      * @param TableNode $locators
      */
     public function assertPageNotContainsElements(TableNode $locators): void
@@ -256,12 +291,16 @@ class CommonContext extends RawContext
 
         foreach ($locators as $locator) {
             try {
-                $this->assertSession()->elementNotExists('css', $locator['locator']);
+                $this->assertSession()
+                  ->elementNotExists('css', $locator['locator']);
                 $elementPresent = true;
             } catch (\Behat\Mink\Exception\Exception $e) {
                 $elementPresent = false;
             }
-            TestCase::assertTrue($elementPresent, 'The element with css ' . $locator['locator'] . 'is visible in the page');
+            TestCase::assertTrue(
+                $elementPresent,
+                'The element with css ' . $locator['locator'] . 'is visible in the page'
+            );
         }
     }
 
@@ -271,6 +310,7 @@ class CommonContext extends RawContext
      * Example: And I should see below text:
      *
      * @Then I should see below text:
+     *
      * @param TableNode $texts
      */
     public function assertPageContainsTexts(TableNode $texts)
@@ -287,6 +327,7 @@ class CommonContext extends RawContext
      * Example: And I should not see below text:
      *
      * @Then I should not see below text:
+     *
      * @param TableNode $texts
      */
     public function assertPageDonotContainTexts(TableNode $texts)
@@ -301,11 +342,14 @@ class CommonContext extends RawContext
      * Checks, that an element with given css contains specific text
      *
      * @Then I should see :arg1 test data in :arg2 element
+     *
      * @param string $value
      * @param string $selector
      */
-    public function iShouldSeeTestDataInElement(string $value, string $selector): void
-    {
+    public function iShouldSeeTestDataInElement(
+        string $value,
+        string $selector
+    ): void {
 
         $elementHtml = $this->findElementByCss($selector)->getHtml();
         $text = $this->testDataHandler->getTestData($value);
@@ -333,6 +377,7 @@ class CommonContext extends RawContext
 
     /**
      * Switch to a given iFrame with css locator
+     *
      * @Then switch to iframe with css :locator
      */
     public function switchToIframeCSS($locator)
@@ -400,41 +445,28 @@ class CommonContext extends RawContext
     }
 
     /**
-     * @Then I should see :url page url
-     * @param string $url
-     * @throws \Exception
-     */
-    public function thenIShouldSeePage(string $url): void
-    {
-        $current_url = $this->getSession()->getCurrentUrl();
-        $windowNames = $this->getSession()->getWindowNames();
-        if (count($windowNames) > 1) {
-            $this->switchToNewTab($windowNames);
-            $current_url = $this->getSession()->getCurrentUrl();
-            $this->getSession()->executeScript('window.close()');
-            //switch back to main window
-            $this->getSession()->switchToWindow();
-        }
-
-        if (!strpos($current_url, $url)) {
-            throw new \Exception("Can not find url $url");
-        }
-    }
-
-    /**
      * Mouse hover with specified CSS locator
      * @When /^I hover over the element "([^"]*)"$/
+     *
      * @param string $locator
+     *
      * @throws \Exception
      */
     public function iHoverOverTheElement($locator)
     {
 
         $session = $this->getSession(); // get the mink session
-        $element = $session->getPage()->find('css', $locator); // runs the actual query and returns the element
+        $element = $session->getPage()
+          ->find(
+              'css',
+              $locator
+          ); // runs the actual query and returns the element
 
         if (null === $element) {
-            throw new \InvalidArgumentException(sprintf('Could not evaluate CSS selector: "%s"', $locator));
+            throw new \InvalidArgumentException(sprintf(
+                'Could not evaluate CSS selector: "%s"',
+                $locator
+            ));
         }
         $element->mouseOver();
     }
@@ -448,9 +480,9 @@ class CommonContext extends RawContext
     public function assertAlertMessage($message)
     {
         $alertText = $this->getSession()
-            ->getDriver()
-            ->getWebDriverSession()
-            ->getAlert_text();
+          ->getDriver()
+          ->getWebDriverSession()
+          ->getAlert_text();
         if ($alertText !== $message) {
             throw new \RuntimeException("Modal dialog present: $alertText, when expected was $message");
         }
@@ -468,9 +500,9 @@ class CommonContext extends RawContext
     public function assertPageContainsLinks(TableNode $links)
     {
         $actualLinks = $this->getSession()
-            ->getPage()
-            ->find('css', 'main')
-            ->findAll('css', 'a');
+          ->getPage()
+          ->find('css', 'main')
+          ->findAll('css', 'a');
         foreach ($links as $link) {
             $flag = false;
             foreach ($actualLinks as $actualLink) {
@@ -499,12 +531,20 @@ class CommonContext extends RawContext
         $element = $this->getSession()->getPage();
         $result = $element->findLink($link);
         if ($result && !$result->isVisible()) {
-            throw new \RuntimeException(sprintf("No link to '%s' on the page %s", $link, $this->getSession()
-                ->getCurrentUrl()));
+            throw new \RuntimeException(sprintf(
+                "No link to '%s' on the page %s",
+                $link,
+                $this->getSession()
+                ->getCurrentUrl()
+            ));
         }
         if (empty($result)) {
-            throw new \RuntimeException(sprintf("No link to '%s' on the page %s", $link, $this->getSession()
-                ->getCurrentUrl()));
+            throw new \RuntimeException(sprintf(
+                "No link to '%s' on the page %s",
+                $link,
+                $this->getSession()
+                ->getCurrentUrl()
+            ));
         }
     }
 
@@ -547,7 +587,9 @@ class CommonContext extends RawContext
     {
         $windowNames = $this->getSession()->getWindowNames();
         if (count($windowNames) > 1) {
-            $this->getSession()->stop($windowNames[1]);
+            $this->getSession()->executeScript('window.close()');
+            //switch back to main window
+            $this->getSession()->switchToWindow();
         }
     }
 
