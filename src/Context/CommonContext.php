@@ -501,4 +501,37 @@ class CommonContext extends RawContext
     {
         $this->getSession()->getPage()->find('css', $locator)->setValue($value);
     }
+
+    /**
+     * @Given I switch to new window
+     */
+    public function iSwitchToNewWindow()
+    {
+        $windowNames = $this->getSession()->getWindowNames();
+        if (count($windowNames) > 1) {
+            $this->getSession()->switchToWindow($windowNames[1]);
+        }
+    }
+
+    /**
+     * @Given I switch to parent window
+     */
+    public function iSwitchToParentWindow()
+    {
+        $windowNames = $this->getSession()->getWindowNames();
+        if (count($windowNames) > 1) {
+            $this->getSession()->switchToWindow($windowNames[0]);
+        }
+    }
+
+    /**
+     * @Given I close the child window
+     */
+    public function iCloseTheChildWindow()
+    {
+        $windowNames = $this->getSession()->getWindowNames();
+        if (count($windowNames) > 1) {
+            $this->getSession()->stop($windowNames[1]);
+        }
+    }
 }
