@@ -508,7 +508,7 @@ class CommonContext extends RawContext
     public function iSwitchToNewWindow()
     {
         $windowNames = $this->getSession()->getWindowNames();
-        if(count($windowNames) > 1) {
+        if (count($windowNames) > 1) {
             $this->getSession()->switchToWindow($windowNames[1]);
         }
     }
@@ -519,7 +519,7 @@ class CommonContext extends RawContext
     public function iSwitchToParentWindow()
     {
         $windowNames = $this->getSession()->getWindowNames();
-        if(count($windowNames) > 1) {
+        if (count($windowNames) > 1) {
             $this->getSession()->switchToWindow($windowNames[0]);
         }
     }
@@ -530,7 +530,7 @@ class CommonContext extends RawContext
     public function iCloseTheChildWindow()
     {
         $windowNames = $this->getSession()->getWindowNames();
-        if(count($windowNames) > 1) {
+        if (count($windowNames) > 1) {
             $this->getSession()->stop($windowNames[1]);
         }
     }
