@@ -1,7 +1,7 @@
 {
   "name": "behat-tools",
   "version": "1.0.0",
-  "description": "Behat Tools ===========",
+  "description": "Behat Tools",
   "main": "index.js",
   "directories": {
     "test": "test"
