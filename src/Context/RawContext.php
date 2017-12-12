@@ -25,7 +25,6 @@ class RawContext extends RawMinkContext
         $this->testDataHandler = new TestDataHandler();
     }
 
-
   /**
    * Find element by css
    *
@@ -39,7 +38,7 @@ class RawContext extends RawMinkContext
         $element = $this->getSession()->getPage()->find('css', $locator);
 
         if (!$element) {
-            throw new \Exception("Can not find element by css : '$locator'");
+            throw new \RuntimeException("Can not find element by css : '$locator'");
         }
 
         return $element;
@@ -68,8 +67,7 @@ class RawContext extends RawMinkContext
    */
     public function getCurrentWindowName()
     {
-        $windowName = $this->getSession()->getWindowName();
-        return $windowName;
+        return $this->getSession()->getWindowName();
     }
 
   /**
@@ -89,9 +87,9 @@ class RawContext extends RawMinkContext
    */
     public function iSwitchToIFrameWithCSSLocator($locator)
     {
-        $iframe = $this->getSession()->getPage()->find("css", $locator);
-        $iframeName = $iframe->getAttribute("name");
-        if ($iframeName == "") {
+        $iframe = $this->getSession()->getPage()->find('css', $locator);
+        $iframeName = $iframe->getAttribute('name');
+        if ($iframeName == '') {
             $javascript = "(function(){
             var iframes = document.getElementsByTagName('iframe');
             for (var i = 0; i < iframes.length; i++) {
@@ -99,10 +97,10 @@ class RawContext extends RawMinkContext
             }
             })()";
             $this->getSession()->executeScript($javascript);
-            $iframe = $this->getSession()->getPage()->find("css", $locator);
-            $iframeName = $iframe->getAttribute("name");
+            $iframe = $this->getSession()->getPage()->find('css', $locator);
+            $iframeName = $iframe->getAttribute('name');
         } else {
-            throw new \Exception("iFrame already has a name: " . $iframeName);
+            throw new \RuntimeException('iFrame already has a name: ' . $iframeName);
         }
         $this->getSession()->getDriver()->switchToIFrame($iframeName);
     }
@@ -132,8 +130,8 @@ class RawContext extends RawMinkContext
 
         $backtrace = debug_backtrace();
 
-        throw new Exception(
-            "Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function']
+        throw new RuntimeException(
+            'Timeout thrown by ' . $backtrace[1]['class'] . '::' . $backtrace[1]['function']
         );
     }
 }

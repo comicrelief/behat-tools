@@ -156,17 +156,17 @@ class CommonContext extends RawContext
         $faker = Faker\Factory::create('en_GB');
         $word = null;
 
-        if (strpos(strtolower($value), 'email') !== false) {
-            $word = 'qa-tester_' . rand(1, 1000000) . '@comicrelieftest.com';
-        } elseif (strpos(strtolower($value), 'postcode') !== false) {
+        if (stripos($value, 'email') !== false) {
+            $word = 'qa-tester_' . random_int(1, 1000000) . '@comicrelieftest.com';
+        } elseif (stripos($value, 'postcode') !== false) {
             $word = $faker->postcode;
-        } elseif (strpos(strtolower($value), 'text') !== false) {
+        } elseif (stripos($value, 'text') !== false) {
             $word = $faker->text;
-        } elseif (strpos(strtolower($value), 'url') !== false) {
+        } elseif (stripos($value, 'url') !== false) {
             $word = $faker->url;
-        } elseif (strpos(strtolower($value), 'id') !== false) {
+        } elseif (stripos($value, 'id') !== false) {
             $word = $faker->uuid;
-        } elseif (strpos(strtolower($value), 'phone') !== false) {
+        } elseif (stripos($value, 'phone') !== false) {
             $word = $faker->phoneNumber;
         } else {
             $word = $faker->bothify('?????####');
@@ -200,7 +200,6 @@ class CommonContext extends RawContext
      */
     public function iFillConfirmTestDataInField(string $value, string $locator): void
     {
-
         $this->findElementByCss($locator)->setValue($this->testDataHandler->getTestData($value));
         $this->testDataHandler->addTestData('confirm' . $value, $this->testDataHandler->getTestData($value));
     }
@@ -414,7 +413,7 @@ class CommonContext extends RawContext
 
         $current_url = $this->getSession()->getCurrentUrl();
         if (!strpos($current_url, $url)) {
-            throw new \Exception("Can not find url $url");
+            throw new \RuntimeException("Can not find url $url");
         }
 
         //switch back to main window
@@ -452,7 +451,7 @@ class CommonContext extends RawContext
             ->getWebDriverSession()
             ->getAlert_text();
         if ($alertText !== $message) {
-            throw new \Exception("Modal dialog present: $alertText, when expected was $message");
+            throw new \RuntimeException("Modal dialog present: $alertText, when expected was $message");
         }
     }
 
@@ -475,12 +474,12 @@ class CommonContext extends RawContext
             $flag = false;
             foreach ($actualLinks as $actualLink) {
                 $actualLinkText = $actualLink->getText();
-                if ((trim($actualLinkText) == $link['links'])) {
+                if (trim($actualLinkText) == $link['links']) {
                     $flag = true;
                 }
             }
             if (!$flag) {
-                throw new \Exception('"' . $link['links'] . '" link can not be found.' . "\n\n");
+                throw new \RuntimeException('"' . $link['links'] . '" link can not be found.' . "\n\n");
             }
         }
     }
@@ -499,11 +498,11 @@ class CommonContext extends RawContext
         $element = $this->getSession()->getPage();
         $result = $element->findLink($link);
         if ($result && !$result->isVisible()) {
-            throw new \Exception(sprintf("No link to '%s' on the page %s", $link, $this->getSession()
+            throw new \RuntimeException(sprintf("No link to '%s' on the page %s", $link, $this->getSession()
                 ->getCurrentUrl()));
         }
         if (empty($result)) {
-            throw new \Exception(sprintf("No link to '%s' on the page %s", $link, $this->getSession()
+            throw new \RuntimeException(sprintf("No link to '%s' on the page %s", $link, $this->getSession()
                 ->getCurrentUrl()));
         }
     }
@@ -516,6 +515,39 @@ class CommonContext extends RawContext
     public function fillField($locator, $value)
     {
         $this->getSession()->getPage()->find('css', $locator)->setValue($value);
+    }
+
+    /**
+     * @Given I switch to new window
+     */
+    public function iSwitchToNewWindow()
+    {
+        $windowNames = $this->getSession()->getWindowNames();
+        if (count($windowNames) > 1) {
+            $this->getSession()->switchToWindow($windowNames[1]);
+        }
+    }
+
+    /**
+     * @Given I switch to parent window
+     */
+    public function iSwitchToParentWindow()
+    {
+        $windowNames = $this->getSession()->getWindowNames();
+        if (count($windowNames) > 1) {
+            $this->getSession()->switchToWindow($windowNames[0]);
+        }
+    }
+
+    /**
+     * @Given I close the child window
+     */
+    public function iCloseTheChildWindow()
+    {
+        $windowNames = $this->getSession()->getWindowNames();
+        if (count($windowNames) > 1) {
+            $this->getSession()->stop($windowNames[1]);
+        }
     }
 
     /**
