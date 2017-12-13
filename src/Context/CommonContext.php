@@ -153,7 +153,6 @@ class CommonContext extends RawContext
      */
     public function iFillTestDataInField(string $value, string $locator): void
     {
-
         $faker = Faker\Factory::create('en_GB');
         $word = null;
 
@@ -173,6 +172,22 @@ class CommonContext extends RawContext
             $word = $faker->bothify('?????####');
         }
 
+        $this->testDataHandler->addTestData($value, $word);
+        $this->findElementByCss($locator)
+            ->setValue($this->testDataHandler->getTestData($value));
+    }
+
+    /**
+     * @When I fill test data :value in :locator field with a fake :fakerFormat
+     *
+     * @param string $value         Test data identifier
+     * @param string $fakerFormat
+     * @param string $locator
+     */
+    public function iFillGivenFormatTestDataInField(string $value, string $fakerFormat, string $locator): void
+    {
+        $faker = Faker\Factory::create('en_GB');
+        $word = $faker->$fakerFormat;
         $this->testDataHandler->addTestData($value, $word);
         $this->findElementByCss($locator)
             ->setValue($this->testDataHandler->getTestData($value));
@@ -533,5 +548,33 @@ class CommonContext extends RawContext
         if (count($windowNames) > 1) {
             $this->getSession()->stop($windowNames[1]);
         }
+    }
+
+    /**
+     * @Then :haystack contains my :needle
+     *
+     * @param string $haystack
+     * @param string $needle
+     */
+    public function assertTestDataContainsOtherTestData($haystack, $needle)
+    {
+        TestCase::assertContains(
+            strtolower($this->testDataHandler->getTestData($needle)),
+            strtolower($this->testDataHandler->getTestData($haystack))
+        );
+    }
+
+    /**
+     * @Then :haystack does not contain my :needle
+     *
+     * @param string $haystack
+     * @param string $needle
+     */
+    public function assertTestDataDoesNotContainOtherTestData($haystack, $needle)
+    {
+        TestCase::assertNotContains(
+            strtolower($this->testDataHandler->getTestData($needle)),
+            strtolower($this->testDataHandler->getTestData($haystack))
+        );
     }
 }
