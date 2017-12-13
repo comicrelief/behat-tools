@@ -401,6 +401,8 @@ class CommonContext extends RawContext
 
     /**
      * @deprecated
+     * @Use I should see the :url and
+     * @Use I close current window and switch to parent window
      *
      * @Then I should see :url page url
      * @param string $url
@@ -408,19 +410,18 @@ class CommonContext extends RawContext
      */
     public function thenIShouldSeePage(string $url): void
     {
-        $current_url = $this->getSession()->getCurrentUrl();
         $windowNames = $this->getSession()->getWindowNames();
         if (count($windowNames) > 1) {
             $this->switchToNewTab($windowNames);
-            $current_url = $this->getSession()->getCurrentUrl();
-            $this->getSession()->executeScript('window.close()');
-            //switch back to main window
-            $this->getSession()->switchToWindow();
         }
 
+        $current_url = $this->getSession()->getCurrentUrl();
         if (!strpos($current_url, $url)) {
-            throw new \Exception("Can not find url $url");
+            throw new \RuntimeException("Can not find url $url");
         }
+
+        //switch back to main window
+        $this->getSession()->switchToWindow();
     }
 
     /**
@@ -543,6 +544,9 @@ class CommonContext extends RawContext
     }
 
     /**
+     * @deprecated
+     * @Use I close current window and switch to parent window
+     *
      * @Given I close the child window
      */
     public function iCloseTheChildWindow()
@@ -553,6 +557,32 @@ class CommonContext extends RawContext
             //switch back to main window
             $this->getSession()->switchToWindow();
         }
+    }
+
+    /**
+     *
+     * @Then I should see the :url
+     * @param string $url
+     * @throws \Exception
+     */
+    public function thenIShouldSeeTheUrl(string $url): void
+    {
+
+        $current_url = $this->getSession()->getCurrentUrl();
+        if (!strpos($current_url, $url)) {
+            throw new \RuntimeException("Can not find url $url");
+        }
+
+    }
+
+    /**
+     * @Given I close current window and switch to parent window
+     */
+    public function iCloseCurrentWindowAndSwitchToParentWindow()
+    {
+            $this->getSession()->executeScript('window.close()');
+            //switch back to main window
+            $this->getSession()->switchToWindow();
     }
 
     /**
