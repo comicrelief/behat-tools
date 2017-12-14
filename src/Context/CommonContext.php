@@ -400,6 +400,10 @@ class CommonContext extends RawContext
     }
 
     /**
+     * @deprecated
+     * @Use I should see the :url and
+     * @Use I close current window and switch to parent window
+     *
      * @Then I should see :url page url
      * @param string $url
      * @throws \Exception
@@ -540,14 +544,43 @@ class CommonContext extends RawContext
     }
 
     /**
+     * @deprecated
+     * @Use I close current window and switch to parent window
+     *
      * @Given I close the child window
      */
     public function iCloseTheChildWindow()
     {
         $windowNames = $this->getSession()->getWindowNames();
         if (count($windowNames) > 1) {
-            $this->getSession()->stop($windowNames[1]);
+            $this->getSession()->executeScript('window.close()');
+            //switch back to main window
+            $this->getSession()->switchToWindow();
         }
+    }
+
+    /**
+     *
+     * @Then I should see the :url
+     * @param string $url
+     * @throws \Exception
+     */
+    public function thenIShouldSeeTheUrl(string $url): void
+    {
+        $currentUrl = $this->getSession()->getCurrentUrl();
+        if (!strpos($currentUrl, $url)) {
+            throw new \RuntimeException("Can not find url $url");
+        }
+    }
+
+    /**
+     * @Given I close current window and switch to parent window
+     */
+    public function iCloseCurrentWindowAndSwitchToParentWindow()
+    {
+            $this->getSession()->executeScript('window.close()');
+            //switch back to main window
+            $this->getSession()->switchToWindow();
     }
 
     /**
