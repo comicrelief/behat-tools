@@ -567,12 +567,10 @@ class CommonContext extends RawContext
      */
     public function thenIShouldSeeTheUrl(string $url): void
     {
-
-        $current_url = $this->getSession()->getCurrentUrl();
-        if (!strpos($current_url, $url)) {
+        $currentUrl = $this->getSession()->getCurrentUrl();
+        if (!strpos($currentUrl, $url)) {
             throw new \RuntimeException("Can not find url $url");
         }
-
     }
 
     /**
