@@ -130,7 +130,7 @@ class RawContext extends RawMinkContext
 
         $backtrace = debug_backtrace();
 
-        throw new RuntimeException(
+        throw new \RuntimeException(
             'Timeout thrown by ' . $backtrace[1]['class'] . '::' . $backtrace[1]['function']
         );
     }
