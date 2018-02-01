@@ -292,6 +292,18 @@ class RestContext implements Context
     }
 
     /**
+     * @Then /^the response should not have "([^"]*)" header$/
+     * @param string $header
+     * @throws \UnexpectedValueException
+     */
+    public function theRestHeaderShouldNotExist($header)
+    {
+        if ($this->_response->hasHeader($header)) {
+            throw new \UnexpectedValueException('HTTP header exists: ' . $header);
+        }
+    }
+
+    /**
      * @Then /^"([^"]*)" header should be "([^"]*)"$/
      * @param string $header
      * @param string $contents
