@@ -615,7 +615,8 @@ class CommonContext extends RawContext
      * @When I scroll :elementId into view
      * @param string $elementId
      */
-    public function scrollIntoView($elementId) {
+    public function scrollIntoView($elementId)
+    {
         $function = <<<JS
     (function(){
       var elem = document.getElementById("$elementId");
@@ -624,8 +625,7 @@ class CommonContext extends RawContext
 JS;
         try {
             $this->getSession()->executeScript($function);
-        }
-        catch(Exception $e) {
+        } catch (\Exception $e) {
             throw new \Exception("ScrollIntoView failed");
         }
     }
