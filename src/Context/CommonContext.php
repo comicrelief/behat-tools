@@ -610,4 +610,23 @@ class CommonContext extends RawContext
             strtolower($this->testDataHandler->getTestData($haystack))
         );
     }
+
+    /**
+     * @When I scroll :elementId into view
+     * @param string $elementId
+     */
+    public function scrollIntoView($elementId) {
+        $function = <<<JS
+    (function(){
+      var elem = document.getElementById("$elementId");
+      elem.scrollIntoView(false);
+    })()
+JS;
+        try {
+            $this->getSession()->executeScript($function);
+        }
+        catch(Exception $e) {
+            throw new \Exception("ScrollIntoView failed");
+        }
+    }
 }
