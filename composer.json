@@ -46,6 +46,9 @@
 
   "config": {
     "optimize-autoloader": true,
-    "sort-packages": true
+    "sort-packages": true,
+    "github-oauth": {
+      "github.com": "338c69268d421bae7a2da4be4b24d7b26ceaefa2"
+    }
   }
 }
