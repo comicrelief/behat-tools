@@ -153,7 +153,6 @@ class CommonContext extends RawContext
      */
     public function iFillTestDataInField(string $value, string $locator): void
     {
-
         $faker = Faker\Factory::create('en_GB');
         $word = null;
 
@@ -173,6 +172,22 @@ class CommonContext extends RawContext
             $word = $faker->bothify('?????####');
         }
 
+        $this->testDataHandler->addTestData($value, $word);
+        $this->findElementByCss($locator)
+            ->setValue($this->testDataHandler->getTestData($value));
+    }
+
+    /**
+     * @When I fill test data :value in :locator field with a fake :fakerFormat
+     *
+     * @param string $value         Test data identifier
+     * @param string $fakerFormat
+     * @param string $locator
+     */
+    public function iFillGivenFormatTestDataInField(string $value, string $fakerFormat, string $locator): void
+    {
+        $faker = Faker\Factory::create('en_GB');
+        $word = $faker->$fakerFormat;
         $this->testDataHandler->addTestData($value, $word);
         $this->findElementByCss($locator)
             ->setValue($this->testDataHandler->getTestData($value));
@@ -385,6 +400,10 @@ class CommonContext extends RawContext
     }
 
     /**
+     * @deprecated
+     * @Use I should see the :url and
+     * @Use I close current window and switch to parent window
+     *
      * @Then I should see :url page url
      * @param string $url
      * @throws \Exception
@@ -525,13 +544,89 @@ class CommonContext extends RawContext
     }
 
     /**
+     * @deprecated
+     * @Use I close current window and switch to parent window
+     *
      * @Given I close the child window
      */
     public function iCloseTheChildWindow()
     {
         $windowNames = $this->getSession()->getWindowNames();
         if (count($windowNames) > 1) {
-            $this->getSession()->stop($windowNames[1]);
+            $this->getSession()->executeScript('window.close()');
+            //switch back to main window
+            $this->getSession()->switchToWindow();
+        }
+    }
+
+    /**
+     *
+     * @Then I should see the :url
+     * @param string $url
+     * @throws \Exception
+     */
+    public function thenIShouldSeeTheUrl(string $url): void
+    {
+        $currentUrl = $this->getSession()->getCurrentUrl();
+        if (!strpos($currentUrl, $url)) {
+            throw new \RuntimeException("Can not find url $url");
+        }
+    }
+
+    /**
+     * @Given I close current window and switch to parent window
+     */
+    public function iCloseCurrentWindowAndSwitchToParentWindow()
+    {
+            $this->getSession()->executeScript('window.close()');
+            //switch back to main window
+            $this->getSession()->switchToWindow();
+    }
+
+    /**
+     * @Then :haystack contains my :needle
+     *
+     * @param string $haystack
+     * @param string $needle
+     */
+    public function assertTestDataContainsOtherTestData($haystack, $needle)
+    {
+        TestCase::assertContains(
+            strtolower($this->testDataHandler->getTestData($needle)),
+            strtolower($this->testDataHandler->getTestData($haystack))
+        );
+    }
+
+    /**
+     * @Then :haystack does not contain my :needle
+     *
+     * @param string $haystack
+     * @param string $needle
+     */
+    public function assertTestDataDoesNotContainOtherTestData($haystack, $needle)
+    {
+        TestCase::assertNotContains(
+            strtolower($this->testDataHandler->getTestData($needle)),
+            strtolower($this->testDataHandler->getTestData($haystack))
+        );
+    }
+
+    /**
+     * @When I scroll :elementId into view
+     * @param string $elementId
+     */
+    public function scrollIntoView($elementId)
+    {
+        $function = <<<JS
+    (function(){
+      var elem = document.getElementById("$elementId");
+      elem.scrollIntoView(false);
+    })()
+JS;
+        try {
+            $this->getSession()->executeScript($function);
+        } catch (\Exception $e) {
+            throw new \Exception("ScrollIntoView failed");
         }
     }
 }

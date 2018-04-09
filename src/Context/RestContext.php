@@ -93,15 +93,15 @@ class RestContext implements Context
 
         $this->requestUrl = $baseUrl . $pageUrl;
 
-        switch (strtoupper($requestMethod)) {
-            case 'GET':
-                $this->_response = $this->_client->get(
-                    $this->requestUrl . '?' . http_build_query((array)$this->restObject),
-                    $this->requestOptions
-                );
-                break;
-            case 'POST':
-                try {
+        try {
+            switch (strtoupper($requestMethod)) {
+                case 'GET':
+                    $this->_response = $this->_client->get(
+                        $this->requestUrl . '?' . http_build_query((array)$this->restObject),
+                        $this->requestOptions
+                    );
+                    break;
+                case 'POST':
                     $this->_response = $this->_client->post(
                         $this->requestUrl,
                         [
@@ -110,16 +110,16 @@ class RestContext implements Context
                             'verify' => false
                         ]
                     );
-                } catch (RequestException $e) {
-                    $this->_response = $e->getResponse();
-                }
-                break;
-            case 'DELETE':
-                $this->_response = $this->_client->delete(
-                    $this->requestUrl . '?' . http_build_query((array)$this->restObject),
-                    $this->requestOptions
-                );
-                break;
+                    break;
+                case 'DELETE':
+                    $this->_response = $this->_client->delete(
+                        $this->requestUrl . '?' . http_build_query((array)$this->restObject),
+                        $this->requestOptions
+                    );
+                    break;
+            }
+        } catch (RequestException $e) {
+            $this->_response = $e->getResponse();
         }
     }
 
@@ -288,6 +288,18 @@ class RestContext implements Context
     {
         if (!$this->_response->hasHeader($header)) {
             throw new \UnexpectedValueException('HTTP header does not exist ' . $header);
+        }
+    }
+
+    /**
+     * @Then /^the response should not have "([^"]*)" header$/
+     * @param string $header
+     * @throws \UnexpectedValueException
+     */
+    public function theRestHeaderShouldNotExist($header)
+    {
+        if ($this->_response->hasHeader($header)) {
+            throw new \UnexpectedValueException('HTTP header exists: ' . $header);
         }
     }
 

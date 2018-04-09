@@ -1,0 +1,22 @@
+{
+  "name": "behat-tools",
+  "version": "1.0.0",
+  "description": "Behat Tools",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/comicrelief/behat-tools.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/comicrelief/behat-tools/issues"
+  },
+  "homepage": "https://github.com/comicrelief/behat-tools#readme"
+}
