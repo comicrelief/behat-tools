@@ -3,7 +3,7 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: comicrelief/frost-user, tag: "latest"}
+  source: {repository: comicrelief/php-base, tag: "7.1"}
 
 inputs:
 - name: behat-tools
