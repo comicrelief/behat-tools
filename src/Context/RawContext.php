@@ -125,7 +125,7 @@ class RawContext extends RawMinkContext
               // do nothing
             }
 
-            usleep(25000); // 0.25 seconds
+            usleep(250000); // 0.25 seconds
         }
 
         $backtrace = debug_backtrace();
