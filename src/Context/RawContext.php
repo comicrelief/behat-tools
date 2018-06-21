@@ -114,7 +114,7 @@ class RawContext extends RawMinkContext
    * @return bool
    * @throws Exception
    */
-    public function spin($lambda, $wait = 240)
+    public function spin($lambda, $wait = 500)
     {
         for ($i = 0; $i < $wait; $i++) {
             try {
@@ -125,7 +125,7 @@ class RawContext extends RawMinkContext
               // do nothing
             }
 
-            usleep(250000); // 0.25 seconds
+            usleep(500000); // 0.50 seconds
         }
 
         $backtrace = debug_backtrace();
