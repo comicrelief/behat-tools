@@ -114,7 +114,7 @@ class RawContext extends RawMinkContext
    * @return bool
    * @throws Exception
    */
-    public function spin($lambda, $wait = 240)
+    public function spin($lambda, $wait = 500)
     {
         for ($i = 0; $i < $wait; $i++) {
             try {
