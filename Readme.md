@@ -41,5 +41,4 @@ message, then the commit will default to being a `patch` release.
 Release types should be defined in the initial line of the commit message as either a `patch`, `minor` or `major` 
 release.
 
-For reference please refer to the pull request template.
-
+For reference on how the pull request should look please refer to the pull request template.
